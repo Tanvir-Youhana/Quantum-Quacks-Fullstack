@@ -22,10 +22,10 @@ function App() {
               <EditProduct />
             </Route>
             {/* route login and restistration with a new path */}
-            <Route path= "/login">
+            <Route path="/login">
             <Login />
             </Route>
-              <Route path= "/registration">
+              <Route path="/registration">
                 <Registration />
             </Route>
           </Switch>
