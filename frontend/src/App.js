@@ -4,10 +4,50 @@ import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
- 
+import './components/App.css';
+import Logo from './robinhood.svg'
 function App() {
   return (
-    <Router>
+      <div className="app">
+        <div>
+          <Router>
+        <Switch>
+            <Route path="/login">
+            <Login />
+            </Route>
+              <Route path="/registration">
+                <Registration />
+            </Route>
+          </Switch>
+          </Router>
+        </div>
+      </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {/*<Router>
     <div className="container">
       <div className="columns">
         <div className="column is-half is-offset-one-quarter">
@@ -21,7 +61,7 @@ function App() {
             <Route path="/edit/:id">
               <EditProduct />
             </Route>
-            {/* route login and restistration with a new path */}
+            
             <Route path="/login">
             <Login />
             </Route>
@@ -32,8 +72,7 @@ function App() {
         </div>
       </div>
     </div>
-    </Router>
-  );
-}
+    </Router>*/}
+
  
 export default App;
