@@ -1,51 +1,32 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import {Formik, Form, Field, ErrorMessage} from "formik";
-import * as Yup from 'yup';
+import React from 'react'
+import { useState, useEffect } from 'react'
+import {Grid, Paper, Avatar, TextField, Button, Typography, Link} from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import './registration.css';
 
-export default function Registration() {
-    const intialValues= {
-        username: "",
-        password: "",
-    };
-
-    const validationSchema= Yup.object().shape({
-        Username: Yup.string().min(3).max(15).required(),
-        Password: Yup.string().min(4).max(20).required(),
-    });
-
-    const onSubmit=() => {};
-
-
+function Registration() {
+        const paperStyle={padding :20, height: '60vh', width: 280, margin:"150px auto"}
+        const avatarStyle={backgroundColor: 'orange'}
+        const stylButn ={margin:'8px 0'}
+        const stylField ={margin:'8px 0'}
     return (
         <div>
-            <Formik
-            intialValues= {intialValues}
-            onSubmit={onSubmit}
-            validationSchema = {validationSchema}
-            >
-                <Form className= "fromContainer">
-                    <label> Username: </label>
-                    <ErrorMessage name="username" component= "span" />
-                    <Field
-                    autocomplete= "off"
-                    id= "inputCreatePost"
-                    name= "username"
-                    placeholder= "(Ex. John123...)"
-                    />
-
-                    <label> Password: </label>
-                    <ErrorMessage name="password" component= "span" />
-                    <Field
-                    autocomplete= "off"
-                    id= "inputCreatePost"
-                    name= "password"
-                    placeholder= "Your password..."
-                    />
-                    <button type= "submit"> Create Account</button>
-                </Form>
-            </Formik>
+            <Grid className='login__container' > 
+                <Paper elevation={10} style={paperStyle}>
+                   <Grid align = 'center'>
+                       <Avatar style={avatarStyle}><LockOutlinedIcon />
+                   </Avatar>
+                  <h2>Create an Account </h2>
+                  </Grid>
+                <TextField label= 'First Name' placeholder= 'Enter First Name...' fullWidth required style={stylField}/>
+                <TextField label= 'Last Name' placeholder= 'Enter Last Name...' fullWidth required style={stylField}/>
+                <TextField label= 'Username' placeholder= 'Enter Username...' fullWidth required style={stylField}/>
+                <TextField label= 'Password' placeholder= 'Enter password...' type= 'password' fullWidth required style={stylField}/>
+                <Button type='submit' color= "success" variant="contained" halfWidth style={stylButn}>Sign Up</Button>
+                </Paper> 
+            </Grid>
         </div>
     )
 }
 
+export default Registration
