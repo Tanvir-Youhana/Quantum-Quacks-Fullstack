@@ -14,12 +14,18 @@ const User = db.define('user',{
         type: DataTypes.STRING,
         allowNull: false,
     },
-    user: {
+    first_name: {
         type: DataTypes.STRING, 
+        allowNull: false, 
+    },
+    last_name:
+    {
+        type: DataTypes.STRING,
         allowNull: false, 
     },
     password: {
         type: DataTypes.STRING,
+        allowNull: false, 
     }
 }, {
     freezeTableName: true,

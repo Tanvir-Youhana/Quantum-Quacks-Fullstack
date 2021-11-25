@@ -26,6 +26,5 @@ app.use(express.json());
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);
 
-
 app.listen(5000, () => console.log('Server running at port 5000'));
 
