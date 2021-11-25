@@ -7,12 +7,14 @@ import {
     updateProduct,
     deleteProduct
 } from "../controllers/Products.js";
+import { getAllUsers } from "../controllers/Users.js";
  
 const router = express.Router();
- 
-router.get('/', getAllProducts);
+
+router.get('/', getAllUsers);
+//router.get('/', getAllProducts);
 router.get('/:id', getProductById);
-router.post('/', createProduct);
+//router.post('/', createProduct);
 router.patch('/:id', updateProduct);
 router.delete('/:id', deleteProduct);
  
