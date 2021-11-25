@@ -24,7 +24,7 @@ function Registration() {
                 <TextField label= 'Password' placeholder= 'Enter password...' type= 'password' fullWidth required style={stylField}/>
                 <Button type='submit' color= "success" variant="contained" halfWidth style={stylButn}>Sign Up</Button>
                 <Typography > Already have an account?  
-                <Link href="./Login" underline="hover">
+                <Link href="./" underline="hover">
                 {'Sign In'}
                         </Link>
                 </Typography>
