@@ -1,7 +1,3 @@
-.login__container{
-    background-color: rgba(5, 1, 1, 0.212);
-}
-
-.login__logo{
-    margin-left: 48px;
+.login__container {
+  background-color: black;
 }

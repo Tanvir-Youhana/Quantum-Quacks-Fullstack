@@ -2,13 +2,11 @@ import React, {useState, setState} from 'react'
 
 function Navbar(){
     return(
-    <>
-    <nav className="navbar">
-        <div className="navbar-container">
-
+    <div className="navbar__wrapper">
+        <div className="navbar-search">
+            <input placeholder="Search" type="text" />
         </div>
-    </nav>
-    </>
+    </div>
     )
 }
 

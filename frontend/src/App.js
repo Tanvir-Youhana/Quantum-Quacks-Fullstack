@@ -4,23 +4,39 @@ import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
 import Login from "./components/Login";
 import Registration from "./components/Registration";
+import Home from "./components/Home";
 import './components/App.css';
-import Logo from './robinhood.svg'
+import Logo from './qq.png'
+
+
+
 function App() {
   return (
       <div className="app">
-        <div>
+        <div className="app__header">
+          <div className= "app__logo">  
+            <img src={Logo} width= {80} />
+          </div>
+          <div className="app_title">
+            Welcome to Quantum Quacks
+          </div>
+         
+        </div>
+        
           <Router>
         <Switch>
-            <Route path="/login">
+            <Route exact path="/">
             <Login />
             </Route>
-              <Route path="/registration">
+              <Route exact path="/registration">
                 <Registration />
+            </Route>
+              <Route path="/Home">
+                <Home />
             </Route>
           </Switch>
           </Router>
-        </div>
+
       </div>
   );
 }
