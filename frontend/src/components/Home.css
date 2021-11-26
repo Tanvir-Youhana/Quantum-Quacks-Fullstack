@@ -1,0 +1,45 @@
+.home {
+  justify-content: center;
+}
+.home_wrapper {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  margin-right: 0px;
+  margin-top: 10px;
+}
+.home__searchContainer {
+  margin-left: 20px;
+}
+.home__searchContainer > input {
+  color: rgb(129, 129, 128);
+  width: 375px;
+  color: white;
+  background-color: black;
+}
+.home__searchContainer > input:focus {
+  outline: none;
+}
+.home__account {
+  display: flex;
+  margin-right: 10px;
+  color: orange;
+}
+.home_content {
+  background-color: #0f0e0e;
+  height: 700px;
+  display: flex;
+  padding: 20px;
+  border-radius: 35px;
+  margin-top: 20px;
+}
+.home_graph {
+  background: rgb(78, 63, 63);
+  flex: 0.6;
+  border-radius: 30px;
+}
+.home_StockList {
+  background: rgb(111, 111, 224);
+  flex: 0.4;
+  border-radius: 30px;
+}

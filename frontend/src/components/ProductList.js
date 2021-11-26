@@ -23,6 +23,8 @@ const ProductList = () => {
     return (
         <div>
             <Link to="/add" className="button is-primary mt-2">Add New</Link>
+            <Link to="/login"  className="button is-primary mt-2"> Login </Link>
+            <Link to= "/registration" className= "button is-primary mt-2"> Registration </Link>
             <table className="table is-striped is-fullwidth">
                 <thead>
                     <tr>
