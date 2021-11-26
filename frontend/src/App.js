@@ -24,19 +24,11 @@ function App() {
         </div>
         
           <Router>
-<<<<<<< HEAD
-        <Switch>
-            <Route exact path="/">
-            <Login />
-            </Route>
-              <Route exact path="/registration">
-=======
           <Switch>
             <Route exact path="/">
             <Login />
             </Route>
               <Route path="/signup">
->>>>>>> 8acaed8dcc61cf1565881c0a5b968d0975016f08
                 <Registration />
             </Route>
               <Route path="/Home">
