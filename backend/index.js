@@ -4,7 +4,8 @@ import db from "./config/database.js";
 import userRoutes from "./routes/index.js"; 
 import cors from "cors";
 import User from "./models/userModel.js";
- 
+import bodyParser from "body-parser"; 
+
 const app = express();
 
 try {
@@ -22,6 +23,8 @@ db.sync({force: true}).then(() => {
 */
 
 app.use(cors());
+//app.use(bodyParser.urlencoded({extended: false}));  
+//app.use(bodyParser.json());
 app.use(express.json());
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);

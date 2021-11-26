@@ -7,11 +7,13 @@ import {
     updateProduct,
     deleteProduct
 } from "../controllers/Products.js";
-import { getAllUsers } from "../controllers/Users.js";
+import { getAllUsers, register, login } from "../controllers/Users.js";
  
 const router = express.Router();
 
 router.get('/', getAllUsers);
+router.post('/login', login);
+router.post('/register', register); 
 //router.get('/', getAllProducts);
 router.get('/:id', getProductById);
 //router.post('/', createProduct);
