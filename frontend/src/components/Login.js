@@ -10,6 +10,7 @@ import instance from "../axios";
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState(""); 
+    const [loginStatus, setLoginStatus] = useState(""); 
 
     const paperStyle={padding :20, height: '50vh', width: 280, margin:"150px auto"}
     const avatarStyle={backgroundColor: 'orange'}
@@ -21,7 +22,12 @@ function Login() {
             email: email,
             password: password 
         }).then((response) => {
-            console.log(response); 
+            if(response.data.message)
+            {
+                setLoginStatus(response.data.message)
+            } else {
+                setLoginStatus(response.data[0].email);
+            }
         })
     };
 
@@ -62,8 +68,9 @@ function Login() {
                 
                 <Typography > Don't have an Account?  
                 <Link href="./signup" underline="hover">
-                {'Sign Up'}
-                        </Link>
+                    {'Sign Up'}
+                </Link>
+                <h1> {loginStatus} </h1> 
                 </Typography>
             
                 </Paper>  

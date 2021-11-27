@@ -10,7 +10,7 @@ function Registration() {
     const [passwordReg, setPasswordReg] = useState("");
     const [first_name_Reg, setFirstNameReg] = useState("");
     const [last_name_Reg, setLastNameReg] = useState(""); 
-
+    const [registerStatus, setRegisterStatus] = useState(""); 
     const register = () => {
         instance.post("/register", {
             email: emailReg,
@@ -18,7 +18,12 @@ function Registration() {
             first_name: first_name_Reg,
             last_name: last_name_Reg,
         }).then((response) => {
-            console.log(response); 
+            if(response.data.message)
+            {
+                setRegisterStatus(response.data.message)
+            } else {
+                setRegisterStatus(response.data[0].email);
+            }
         })
     };
         const paperStyle={padding :20, height: '65vh', width: 280, margin:"100px auto"}
@@ -71,8 +76,9 @@ function Registration() {
                 </Button>
                 <Typography > Already have an account?  
                 <Link href="./" underline="hover">
-                {'Sign In'}
-                        </Link>
+                    {'Sign In'}
+                </Link>
+                <h1> {registerStatus} </h1> 
                 </Typography>
                 </Paper> 
             </Grid>
