@@ -1,5 +1,9 @@
 import { Sequelize } from "sequelize";
-require("dotenv").config()
+import dotenv  from "dotenv"
+
+dotenv.config()
+// import dotenv from "dotenv";
+// require("dotenv").config()
 
 const DB_HOST = process.env.DB_HOST
 const DB_USER = process.env.DB_USER

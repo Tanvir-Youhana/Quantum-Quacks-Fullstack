@@ -7,7 +7,7 @@ import User from "./models/userModel.js";
 import bodyParser from "body-parser"; 
 
 const app = express();
-
+const port= process.env.PORT
 try {
     await db.authenticate();
     console.log('Database connected...');
@@ -29,5 +29,5 @@ app.use(express.json());
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);
 
-app.listen(5000, () => console.log('Server running at port 5000'));
+app.listen(port, () => console.log('Server running at port 5000'));
 
