@@ -29,12 +29,12 @@ export const register = async (req, res) => {
             }); 
         if(isEmailExist)
         {
-            return res.status(404).json({message: "Email has already been taken."})
+            return res.status(202).json({message: "Email has already been taken."})
         }
         const newUser = new User({first_name, last_name, email, password});
         const savedUser = await newUser.save().catch((err) => {
             console.log("Error: ", err);
-            res.status(500).json({error: "Cannot register user at the moment"})
+            return res.status(500).json({message: "Cannot register user at the moment"})
         })
         if(savedUser)
         {
@@ -59,9 +59,9 @@ export const login = async (req, res) => {
         // If email does not exist or if password is incorrect 
         if(!user || (user.password !== password))
         {
-            return res.status(400).json({message: "Email or password does not match"});
+            return res.status(202).json({message: "Email or password does not match!"});
         }
-        res.status(201).json(user); 
+        res.status(201).json({message: "Login successful!"}); 
     } catch (e)
     {
         res.status(500).send(e.message); 
