@@ -4,6 +4,7 @@ import {Grid, Paper, Avatar, TextField, Button, Typography, Link} from '@mui/mat
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import './registration.css';
 import instance from "../axios";
+import Logo from "./qq.png";
 
 function Registration() {
     const [emailReg, setEmailReg] = useState(""); 
@@ -32,6 +33,15 @@ function Registration() {
         const stylField ={margin:'8px 0'}
     return (
         <div>
+            <div className="app__header">
+          <div className= "app__logo">  
+            <img src={Logo} width= {80} />
+          </div>
+          <div className="app_title">
+            Welcome to Quantum Quacks
+          </div>
+         
+        </div>
             <Grid className='login__container' > 
                 <Paper elevation={10} style={paperStyle}>
                    <Grid align = 'center'>

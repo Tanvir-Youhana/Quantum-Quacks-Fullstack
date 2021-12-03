@@ -7,13 +7,14 @@ import Registration from "./components/Registration";
 import Home from "./components/Home";
 import './components/App.css';
 import Logo from './qq.png'
+import UpdatePassword from "./components/UpdatePassword";
 
 
 
 function App() {
   return (
       <div className="app">
-        <div className="app__header">
+        {/* <div className="app__header">
           <div className= "app__logo">  
             <img src={Logo} width= {80} />
           </div>
@@ -21,7 +22,7 @@ function App() {
             Welcome to Quantum Quacks
           </div>
          
-        </div>
+        </div> */}
         
           <Router>
           <Switch>
@@ -33,6 +34,9 @@ function App() {
             </Route>
               <Route path="/Home">
                 <Home />
+            </Route>
+            <Route path= "/Update">
+              <UpdatePassword />
             </Route>
           </Switch>
           </Router>
