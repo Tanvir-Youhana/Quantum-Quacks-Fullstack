@@ -17,6 +17,7 @@ function Login() {
     const stylButn ={margin:'8px 0'}
     const stylField ={margin:'8px 0'}
 
+    instance.defaults.withCredentials = true; 
     const login = () => {
         instance.post("/login", {
             email: email,
@@ -30,6 +31,14 @@ function Login() {
             }
         })
     };
+
+    useEffect(() => {
+        instance.get("/login").then((response) => {
+            if(response.data.loggedIn === true)
+            setLoginStatus(response.data.email[0].email);
+            console.log(response); 
+        })
+    }, [])
 
     return (
         <div className="login">
