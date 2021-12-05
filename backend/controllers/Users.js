@@ -68,7 +68,8 @@ export const login = async (req, res) => {
         req.session.password = user.password; 
 
         console.log(req.session.email); 
-        res.status(201).json({message: "Login successful!"}); 
+        res.redirect('/home');
+        // res.status(201).json({message: "Login successful!"});  
     } catch (e)
     {
         res.status(500).send(e.message); 
@@ -86,19 +87,19 @@ export const getLogin = async(req, res) => {
 export const updatePassword = async (req, res) => {
     try { 
         // Check if user did not type in the correct old password
-        if(req.body.old_password != req.session.password)
+        if(req.body.oldPassword != req.session.password)
         {
             console.log("Incorrect password!");
             return res.status(202).json({message: "The old password is incorrect! Please try again."});
         }
         
         // Check if new password does not match confirm password 
-        if(req.body.new_password != req.body.confirm_password)
+        if(req.body.newPassword != req.body.confirmPassword)
         {
             console.log("New password does not match with confirm password!");
             return res.status(202).json({message: "The new password does not match with confirm password! Please try again."});
         }
-        await User.update({ password: req.body.new_password}, {
+        await User.update({ password: req.body.newPassword}, {
             where: {
                 email: req.session.email 
             }

@@ -6,6 +6,7 @@ import './Login.css'
 import axios, { Axios } from "axios"
 import instance from "../axios";
 import Logo from './qq.png';
+import Navbar from './Navbar'
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -26,6 +27,7 @@ function Login() {
             if(response.data.message)
             {
                 setLoginStatus(response.data.message)
+                
             } else {
                 setLoginStatus(response.data[0].email);
             }
@@ -43,13 +45,13 @@ function Login() {
     return (
         <div className="login">
             <div className="app__header">
-          <div className= "app__logo">  
+          {/* <div className= "app__logo">  
             <img src={Logo} width= {80} />
           </div>
           <div className="app_title">
             Welcome to Quantum Quacks
-          </div>
-         
+          </div> */}
+         <Navbar/>
         </div>
             <Grid className='login__container' > 
                 <Paper elevation={10} style={paperStyle}>

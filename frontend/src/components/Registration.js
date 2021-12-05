@@ -5,6 +5,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import './registration.css';
 import instance from "../axios";
 import Logo from "./qq.png";
+import Navbar from './Navbar';
 
 function Registration() {
     const [emailReg, setEmailReg] = useState(""); 
@@ -34,13 +35,13 @@ function Registration() {
     return (
         <div>
             <div className="app__header">
-          <div className= "app__logo">  
+          {/* <div className= "app__logo">  
             <img src={Logo} width= {80} />
           </div>
           <div className="app_title">
             Welcome to Quantum Quacks
-          </div>
-         
+          </div> */}
+         <Navbar/>
         </div>
             <Grid className='login__container' > 
                 <Paper elevation={10} style={paperStyle}>
