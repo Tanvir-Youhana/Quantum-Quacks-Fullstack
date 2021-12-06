@@ -1,5 +1,5 @@
 import User from "../models/userModel.js";
-//import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 //import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import db from "../config/database.js";
@@ -24,7 +24,8 @@ export const register = async (req, res) => {
     try {
         const {first_name, last_name, email, password} = req.body; 
         // Check if email already exist 
-        const isEmailExist = await User.findOne({where: {email}}).catch(
+
+        const isEmailExist = await User.findOne({where: {email: email}}).catch(
             (err) => {
                 console.log("Error: ", err)
             }); 
@@ -32,15 +33,25 @@ export const register = async (req, res) => {
         {
             return res.status(202).json({message: "Email has already been taken."})
         }
-        const newUser = new User({first_name, last_name, email, password});
-        const savedUser = await newUser.save().catch((err) => {
-            console.log("Error: ", err);
-            return res.status(500).json({message: "Cannot register user at the moment"})
-        })
-        if(savedUser)
-        {
-            res.json({message: "Your registration has been successfully completed"})
-        }
+        bcrypt.hash(password, 10).then((hash) => {
+            User.create({
+                first_name: first_name,
+                last_name: last_name,
+                email: email,
+                password: hash,
+            });
+            res.json("User created!");
+        });
+        
+        // const newUser = new User({first_name, last_name, email, password});
+        // const savedUser = await newUser.save().catch((err) => {
+        //     console.log("Error: ", err);
+        //     return res.status(500).json({message: "Cannot register user at the moment"})
+        // })
+        // if(savedUser)
+        // {
+        //     res.json({message: "Your registration has been successfully completed"})
+        // }
 
     } catch (e)
     {
@@ -51,30 +62,23 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
     try 
     {
-        const {email, password} = req.body; 
-        const user = await User.findOne({where: {email}}).catch(
-            (err) => {
-                console.log("Error: ", err);
-            }
-        );
-        // If email does not exist or if password is incorrect 
-        if(!user || (user.password !== password))
-        {
-            return res.status(202).json({message: "Email or password does not match!"});
-        }
+        const { email, password } = req.body;
 
-        req.session.email = user.email; 
-        req.session.first_name = user.first_name; 
-        req.session.password = user.password; 
-
-        console.log(req.session.email); 
-        res.status(201).json({message: "Login successful!"}); 
+        const user = await User.findOne({ where: { email: email } });
+      
+        if (!user) res.json({ error: "User Doesn't Exist" });
+      
+        bcrypt.compare(password, user.password).then((match) => {
+          if (!match) res.json({ error: "Wrong Username And Password Combination" });
+      
+          res.json("Successfully logged in");
+        });
     } catch (e)
     {
         res.status(500).send(e.message); 
     }
 }
-
+ 
 export const getLogin = async(req, res) => {
     if(req.session.email)
     {

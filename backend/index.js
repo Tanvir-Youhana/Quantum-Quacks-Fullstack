@@ -8,7 +8,10 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 
+
 const app = express();
+app.use(express.json());
+// const db = require("./models");
 const port= process.env.DB_PORT
 try {
     await db.authenticate();
@@ -17,13 +20,15 @@ try {
     console.error('Connection error:', error);
 }
 
+// Routers (dont really know the use for this yet)
+// const postRoute= require("./routes/index");
+// app.use("/posts", postRouter);
 
 /*
 db.sync({force: true}).then(() => {
     console.log("Drop and re-sync db.");
   });
 */
-app.use(express.json());
 app.use(cors({
     origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PATCH", "DELETE"],
@@ -45,6 +50,8 @@ app.use(session({
 
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);
+// db.Sequelize.sync().then(() => {
+    app.listen(port, () => console.log(`Server running at port ${port}...`));
 
-app.listen(port, () => console.log(`Server running at port ${port}...`));
+
 
