@@ -6,12 +6,19 @@ import './Login.css'
 import axios, { Axios } from "axios"
 import instance from "../axios";
 import Logo from './qq.png';
+<<<<<<< HEAD
 import Navbar from './Navbar'
+=======
+import {useHistory} from "react-router-dom"
+>>>>>>> 27bf92955ad37c8b39783e069cc38f8c2000cf9e
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState(""); 
     const [loginStatus, setLoginStatus] = useState(""); 
+
+
+    let history = useHistory();
 
     const paperStyle={padding :20, height: '50vh', width: 280, margin:"150px auto"}
     const avatarStyle={backgroundColor: 'orange'}
@@ -19,6 +26,7 @@ function Login() {
     const stylField ={margin:'8px 0'}
 
     instance.defaults.withCredentials = true; 
+    
     const login = () => {
         instance.post("/login", {
             email: email,
@@ -30,6 +38,7 @@ function Login() {
                 
             } else {
                 setLoginStatus(response.data[0].email);
+                history.push("/Home");
             }
         })
     };
