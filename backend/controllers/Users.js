@@ -1,10 +1,14 @@
 import User from "../models/userModel.js";
 import bcrypt from 'bcrypt';
-//import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import db from "../config/database.js";
 //const SECRET = "asbadbbdbbh7";
 import session from 'express-session'; 
+import sign from 'jsonwebtoken';
+
+
+
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -70,8 +74,12 @@ export const login = async (req, res) => {
       
         bcrypt.compare(password, user.password).then((match) => {
           if (!match) res.json({ error: "Wrong Username And Password Combination" });
-      
-          res.json("Successfully logged in");
+        
+          const accessToken = jwt.sign(
+            { email: user.email, id: user.id },
+            "importantsecret"
+          );
+          res.json(accessToken);
         });
     } catch (e)
     {
