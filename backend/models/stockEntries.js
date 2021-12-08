@@ -4,7 +4,7 @@ import db from "../config/database.js";
 const { DataTypes } = Sequelize;
  
 const stockEntry = db.define('stock_entry',{
-    id:{
+    entryID:{
         type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
