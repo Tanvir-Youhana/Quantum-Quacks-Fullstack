@@ -2,6 +2,7 @@ import stockEntry from '../models/stockEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import SI from 'nodejs-stock-info';
+import cts from 'check-ticker-symbol';
 
 export const addStockEntry = async(req, res) => {
     try {
@@ -9,8 +10,11 @@ export const addStockEntry = async(req, res) => {
 
         // Check if tickerName is valid 
         /*
-        
         */
+       if(!cts.valid(tickerName))
+       {
+           return res.status(404).json({message: "Ticker name is invalid."});
+       }
        
         // Make sure we get userID from jswebtoken 
 
