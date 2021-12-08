@@ -16,6 +16,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Logo from "./qq.png";
+import { Link } from "react-router-dom";
+// import { baseUrl } from "./src/App.js";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -81,6 +83,11 @@ function Navbar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const logout = () => {
+    window.localStorage.clear();
+    window.location.href = "./";
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -98,8 +105,11 @@ function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Setting</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Sign Out</MenuItem>
+      {/* onClick={handleMenuClose} */}
+      <MenuItem component={Link} to="./setting">
+        Setting
+      </MenuItem>
+      <MenuItem onClick={logout}>Sign Out</MenuItem>
     </Menu>
   );
 

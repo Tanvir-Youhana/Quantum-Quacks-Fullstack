@@ -23,7 +23,7 @@ const iconStyl = { fontSize: 35, color: "orange" };
 function UpdatePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordStatus, setPasswordStatus] = useState("");
 
   const paperStyle = {
@@ -38,10 +38,10 @@ function UpdatePassword() {
 
   const updatePassword = () => {
     instance
-      .patch("/setting", {
+      .patch("/updatePassword", {
         oldPassword: oldPassword,
         newPassword: newPassword,
-        confirmPassword: confirmPassword 
+        confirmPassword: confirmPassword,
       })
       .then((response) => {
         if (response.data.message) {
