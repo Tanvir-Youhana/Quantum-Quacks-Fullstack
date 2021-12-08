@@ -8,10 +8,11 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-import {test, getRealTime, getHistorical} from "../controllers/Stocks.js";
+import {addStockEntry, test, getRealTime, getHistorical} from "../controllers/Stocks.js";
 const router = express.Router();
 
 router.get('/', getAllUsers);
+router.post('/entry/ticker', addStockEntry);
 router.get('/test', test);
 router.get('/realtime', getRealTime); 
 router.get('/stock/:symbol', getHistorical); 

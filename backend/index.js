@@ -13,10 +13,11 @@ const port= process.env.DB_PORT
 try {
     await db.authenticate();
     console.log('Database connected...');
+    db.sync();
+    console.log('Creating all the tables defined in user');
 } catch (error) {
     console.error('Connection error:', error);
 }
-
 
 /*
 db.sync({force: true}).then(() => {

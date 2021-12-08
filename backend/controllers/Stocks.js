@@ -1,6 +1,35 @@
+import stockEntry from '../models/stockEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import SI from 'nodejs-stock-info';
+
+export const addStockEntry = async(req, res) => {
+    try {
+        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
+
+        // Check if tickerName is valid 
+        /*
+        
+        */
+       
+        // Make sure we get userID from jswebtoken 
+
+        const newStockEntry = await stockEntry.create({
+            userID: userID, // req.params.user_id from jswebtoken
+            tickerName: tickerName,    // Valid Ticker Name
+            prediction: prediction,    // Bullish / Bearish 
+            timeFrame: timeFrame,      // EOD / EOW / EOM
+            confidentLevel: confidentLevel, // 1 - 10 
+            description: description, // [String]
+            priceRange: priceRange, // [String] 
+        });
+        res.json("Stock Entry added!")
+
+    } catch (e) 
+    {
+        return res.status(500).send(e.message); 
+    }
+}
 
 
 
