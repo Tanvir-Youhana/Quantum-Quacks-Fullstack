@@ -7,11 +7,14 @@ import {
     updateProduct,
     deleteProduct
 } from "../controllers/Products.js";
-import { getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
- 
+import {getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
+import {test, getRealTime, getHistorical} from "../controllers/Stocks.js";
 const router = express.Router();
 
 router.get('/', getAllUsers);
+router.get('/test', test);
+router.get('/realtime', getRealTime); 
+router.get('/stock/:symbol', getHistorical); 
 router.post('/login', login);
 router.get('/login', getLogin); 
 router.post('/register', register); 

@@ -42,7 +42,6 @@ app.use(session({
 }));
 //app.use(bodyParser.urlencoded({extended: false}));  
 //app.use(bodyParser.json());
-
 app.use('/', userRoutes); 
 //app.use('/products', productRoutes);
 
