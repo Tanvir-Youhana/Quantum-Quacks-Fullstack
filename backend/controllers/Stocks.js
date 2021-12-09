@@ -4,6 +4,21 @@ import StockSocket from 'stocksocket';
 import SI from 'nodejs-stock-info';
 import cts from 'check-ticker-symbol';
 
+export const userStockList = async(req, res) => {
+    try {
+        const list = await stockEntry.findAll({
+            attributes: ['tickerName'],
+            where: {
+                userID: req.params.id
+            }
+        })
+        return res.status(201).json(list); 
+    } catch (e)
+    {
+        return res.status(500).send(e.message); 
+    }
+}
+
 export const addStockEntry = async(req, res) => {
     try {
         const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
