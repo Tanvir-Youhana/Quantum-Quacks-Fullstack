@@ -23,6 +23,8 @@ export const addStockEntry = async(req, res) => {
     try {
         const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
 
+        // Set userID to stored user.id  
+            //const userID = userID; 
         // Check if tickerName is valid 
         /*
         */
@@ -30,7 +32,24 @@ export const addStockEntry = async(req, res) => {
        {
            return res.status(404).json({message: "Ticker name is invalid."});
        }
-       
+       // Check if entry has same tickerName + timeFrame
+       const duplicatEntry = await stockEntry.findOne({
+           attributes: ['tickerName', 'timeFrame'],
+           where: {
+               userID: userID,
+               tickerName: tickerName,
+               timeFrame: timeFrame
+
+            }}).catch(
+           (err) => {
+               console.log("Error: ", err); 
+           }
+       );
+       if(duplicatEntry)
+        {
+            return res.status(404).json({message: "Entry already exist"});
+        }
+
         // Make sure we get userID from jswebtoken 
 
         const newStockEntry = await stockEntry.create({
