@@ -1,9 +1,9 @@
 import stockEntry from '../models/stockEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
-import SI from 'nodejs-stock-info';
 import cts from 'check-ticker-symbol';
 
+// Get current user stock list. Still work in progress. 
 export const userStockList = async(req, res) => {
     try {
         const list = await stockEntry.findAll({
@@ -12,6 +12,7 @@ export const userStockList = async(req, res) => {
                 userID: req.params.id
             }
         })
+        // JSON.stringify(list, null, 2); 
         return res.status(201).json(list); 
     } catch (e)
     {
@@ -19,6 +20,8 @@ export const userStockList = async(req, res) => {
     }
 }
 
+
+// Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
         const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
@@ -69,46 +72,7 @@ export const addStockEntry = async(req, res) => {
     }
 }
 
-
-
-export const test = async(req, res) => {
-    try{
-
-        
-    } catch (e)
-    {
-        return res.status(500).send(e.message); 
-    }
-}
-
-export const addTickers = async(req, res) => {
-    const tickerName = req.params.ticker;
-    StockSocket.addTicker(stock);
-}
-export const getRealTime = async(req, res) => {
-
-        
-        StockSocket.addTicker("AAPL", stockPriceChanged);
-
-        function stockPriceChanged(data)
-        {
-            //console.log(data);
-            res.json(data); 
-        }
-                //StockSocket.removeTicker("AAPL"); 
-                /*
-               
-        StockSocket.addTicker("AAPL", function(err, stockPriceChanged) {
-            if(err)
-            {
-                return res.status(404).json("error");
-            } else {
-                return res.status(201).json(stockPriceChanged);
-            }
-        })
-        */
-
-}   
+// Currently use this to get historical price data. 
 export const getHistorical = async(req, res) => {
     yahooFinance.historical({
         symbol: req.params.symbol, // req.params.symbol 
@@ -123,3 +87,49 @@ export const getHistorical = async(req, res) => {
         }
     })
 }
+
+// Currently use this to get current price
+export const yahooRealTime = async(req, res) => {
+    yahooFinance.quote({
+        symbol: 'KO',
+        modules: ['price', 'summaryDetail']
+    }, function(err, quotes) {
+        if(err)
+        {
+            return res.status(4040).json("error");
+        } else {
+            return res.status(201).json(quotes); 
+        }
+    })
+}
+
+// Currently not using this. Constantly output price but not sure how to use it. 
+/*
+export const addTickers = async(req, res) => {
+    const tickerName = req.params.ticker;
+    StockSocket.addTicker(stock);
+}
+
+export const getRealTime = async(req, res) => {
+
+        
+        StockSocket.addTicker("AAPL", stockPriceChanged);
+
+        function stockPriceChanged(data)
+        {
+            //console.log(data);
+            res.json(data); 
+        }
+                //StockSocket.removeTicker("AAPL"); 
+                
+               
+        StockSocket.addTicker("AAPL", function(err, stockPriceChanged) {
+            if(err)
+            {
+                return res.status(404).json("error");
+            } else {
+                return res.status(201).json(stockPriceChanged);
+            }
+        })
+}   
+*/
