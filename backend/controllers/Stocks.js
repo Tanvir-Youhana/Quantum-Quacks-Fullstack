@@ -1,4 +1,5 @@
 import stockEntry from '../models/stockEntries.js';
+import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import cts from 'check-ticker-symbol';
@@ -24,7 +25,7 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
+        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange, currentPrice, expirationAt} = req.body; 
 
         // Set userID to stored user.id  
             //const userID = userID; 
@@ -65,8 +66,18 @@ export const addStockEntry = async(req, res) => {
             confidentLevel: confidentLevel, // 1 - 10 
             description: description, // [String]
             priceRange: priceRange, // [String] 
+            currentPrice: currentPrice, // get currentPrice from API 
+            expirationAt: expirationAt //  Calculate expiration using Sequelize 
         });
         res.json("Stock Entry added!")
+        const {checkEntryID, actualPrice, accuracy} = req.body; 
+
+        const newCheckEntry = await checkEntry.create({
+            checkEntryID: checkEntryID,
+            actualPrice: actualPrice,
+            accuracy: accuracy
+        })
+        console.log("Check Entry also added!"); 
 
     } catch (e) 
     {

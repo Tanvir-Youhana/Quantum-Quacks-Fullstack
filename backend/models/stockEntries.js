@@ -18,6 +18,10 @@ const stockEntry = db.define('stock_entry',{
         type: DataTypes.STRING,
         allowNull: false,
     },
+    currentPrice: {
+        type: DataTypes.DOUBLE,
+        allowNull: false, 
+    },
     prediction: {
         type: DataTypes.STRING, 
         allowNull: false, 
@@ -40,6 +44,11 @@ const stockEntry = db.define('stock_entry',{
     {
         type: DataTypes.STRING,
         allowNull: true,
+    },
+    expirationAt: 
+    {
+        type: DataTypes.DATE, 
+        allowNull: false,    
     }
 }, {
     freezeTableName: true,
