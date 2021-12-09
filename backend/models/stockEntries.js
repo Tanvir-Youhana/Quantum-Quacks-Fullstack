@@ -43,8 +43,8 @@ const stockEntry = db.define('stock_entry',{
     }
 }, {
     freezeTableName: true,
-    timestamps:false,
-    createdAt: false,
+    timestamps:true,
+    createdAt: true,
     updatedAt: false,
 }); 
  
