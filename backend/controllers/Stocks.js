@@ -126,12 +126,13 @@ export const addStockEntry = async(req, res) => {
         // ***Make sure we get userID from jswebtoken 
 
         // Make sure prediction has valid input
-        if(prediction != ("Bullish" || "Bearish"))
+        if(prediction != "Bullish" && prediction != "Bearish")
         {
             return res.status(404).json({message: "Invalid prediction input"}); 
         }
         // Make sure timeFrame has valid input
-        if(timeFrame != ("EOD" || "EOW" || "EOM"))
+        console.log("timeFrame: " + timeFrame); 
+        if(timeFrame != "EOD" && timeFrame != "EOW" && timeFrame != "EOM")
         {
             return res.status(404).json({message: "Invalid timeFrame input"});
         }
@@ -183,6 +184,20 @@ export const addStockEntry = async(req, res) => {
             await newStockEntry.save(); 
             console.log("Check ExpirationAt: " + newStockEntry.expirationAt);
         } 
+        if(timeFrame == "EOW")
+        {
+            // 7 days = 604,800,000 ms
+            newStockEntry.expirationAt = new Date(new Date(newStockEntry.createdAt).getTime() + 604800000).setHours(16,0,0);
+            await newStockEntry.save(); 
+            console.log("Check ExpirationAt: " + newStockEntry.expirationAt);
+        }
+        if(timeFrame == "EOM")
+        {
+            // 1 month = 2,629,800,000 ms
+            newStockEntry.expirationAt = new Date(new Date(newStockEntry.createdAt).getTime() + 2629800000).setHours(16,0,0);
+            await newStockEntry.save();
+            console.log("Check ExpirationAt: " + newStockEntry.expirationAt); 
+        }
 
 
         // Create newCheckEntry row for newStockEntry 
