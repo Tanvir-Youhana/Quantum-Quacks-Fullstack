@@ -8,10 +8,12 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-import {yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
+import {checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
 const router = express.Router();
 
 router.get('/', getAllUsers);
+router.get('/checkUserEntry', checkUserEntry);
+router.get('/oldStockEntries', oldStockEntries);
 router.get('/yahooRealTime', yahooRealTime); 
 router.get('/:id/stocklist', userStockList); 
 router.post('/entry/ticker', addStockEntry);

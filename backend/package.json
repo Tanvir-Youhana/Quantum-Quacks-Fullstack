@@ -25,7 +25,6 @@
     "mysql2": "^2.3.3",
     "nodejs-stock-info": "^0.1.20",
     "sequelize": "^6.12.0-alpha.1",
-    "stocksocket": "^2.1.2",
     "yahoo-finance": "^0.3.7"
   },
   "devDependencies": {
