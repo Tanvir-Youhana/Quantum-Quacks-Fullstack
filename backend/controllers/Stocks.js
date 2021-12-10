@@ -3,17 +3,75 @@ import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import cts from 'check-ticker-symbol';
+import { Sequelize } from 'sequelize';
 
-// Get current user stock list. Still work in progress. 
-
-export const checkUserStockList = async(req, res) => {
+// Refresh button next to each entry. Still work in progress.
+export const checkUserEntry = async(req, res) => {
     try {
+        // SELECT currentPrice, WHERE userID = this.userID AND expirationAT < currentDate
+        const entry = await stockEntry.findAll({
+            where: {
+                userID: req.params.userID,
+                entryID: req.params.entryID
+                /*
+                expirationAt: {
+                    [Op.lt]:
+                    Sequelize.fn('NOW')
+                }
+                */
+            }
+        });
+        const check = await checkEntry.findAll({
+            where: {
+                entryID: req.params.entryID 
+            }
+        });
+        // Get acutalPrice
+        let actualPrice; 
+        await yahooFinance.quote({
+            symbol: entry.tickerName,
+            modules: ['price']
+        }, function(err, quotes) {
+            if (err)
+            {
+                return res.status(404).json("error");
+            } else {
+                actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
+            }
+        });
+        
+        // Create accuracy 
+        if(entry.currentPrice < check.actualPrice)
+        {
+            if(entry.prediction == "Bearish")
+            {
+                check.accuracy = "False";
+            } else {
+                check.accuracy = "True";
+            }
+        }
+        if(entry.currentPrice > check.actualPrice)
+        {
+            if(entry.prediction == "Bearish")
+            {
+                check.accuracy = "True";
+            } else {
+                check.accuracy = "False";
+            }
+        }
+        if(entry.currentPrice == check.actualPrice)
+        {
+            check.accuracy = "Sideways"; 
+            console.log("Current Price and Actual Price are equal!");
+        }
 
     } catch(e)
     {
         res.stauts(500).send(e.message); 
     }
 }
+
+// View current user stock list. 
 export const userStockList = async(req, res) => {
     try {
         const list = await stockEntry.findAll({
@@ -165,8 +223,8 @@ export const getHistorical = async(req, res) => {
 export const yahooRealTime = async(req, res) => {
 
     yahooFinance.quote({
-        symbol: 'KO',
-        modules: ['price'] //summaryDetail
+        symbol: 'TSLA',
+        modules: ['price', 'summaryDetail'] //summaryDetail
     }, function(err, quotes) {
         if(err)
         {
