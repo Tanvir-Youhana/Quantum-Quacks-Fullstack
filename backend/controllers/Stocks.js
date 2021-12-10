@@ -3,6 +3,8 @@ import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import cts from 'check-ticker-symbol';
+import moment from 'moment-timezone';
+import { Sequelize } from "sequelize";
 
 // Get current user stock list. Still work in progress. 
 export const userStockList = async(req, res) => {
@@ -25,7 +27,7 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange, expirationAt} = req.body; 
+        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
 
         // Set userID to stored user.id  
             //const userID = userID; 
@@ -71,9 +73,10 @@ export const addStockEntry = async(req, res) => {
                  currentPrice = (quotes.price.regularMarketPrice).toFixed(2);
             }
         })
-        
 
         console.log("currentPrice: " + currentPrice);
+
+        let expirationAt = new Date("July 21, 1983 01:15:00"); 
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name
@@ -86,6 +89,19 @@ export const addStockEntry = async(req, res) => {
             expirationAt: expirationAt //  Calculate expiration using Sequelize 
         });
         res.json("Stock Entry added!")
+        
+        // Create expirationAt
+        if(timeFrame == "EOD") {
+            //newStockEntry.expirationAt = newStockEntry.createdAt;
+            //newStockEntry.expirationAt = new Date(new Date(newStockEntry.createdAt).getTime() + 24 * 60 * 60 * 1000);
+
+            newStockEntry.expirationAt = new Date(newStockEntry.createdAt).setHours(16, 0, 0); 
+
+            await newStockEntry.save(); 
+            console.log("Check ExpirationAt: " + newStockEntry.expirationAt);
+        } 
+
+
         const {checkEntryID, actualPrice, accuracy} = req.body; 
 
         const newCheckEntry = await checkEntry.create({

@@ -48,7 +48,7 @@ const stockEntry = db.define('stock_entry',{
     expirationAt: 
     {
         type: DataTypes.DATE, 
-        allowNull: false,    
+        allowNull: true,    
     }
 }, {
     freezeTableName: true,
