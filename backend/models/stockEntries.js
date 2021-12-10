@@ -19,7 +19,7 @@ const stockEntry = db.define('stock_entry',{
         allowNull: false,
     },
     currentPrice: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false, 
     },
     prediction: {

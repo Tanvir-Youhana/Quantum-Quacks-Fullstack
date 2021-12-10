@@ -25,7 +25,7 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange, currentPrice, expirationAt} = req.body; 
+        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange, expirationAt} = req.body; 
 
         // Set userID to stored user.id  
             //const userID = userID; 
@@ -58,6 +58,22 @@ export const addStockEntry = async(req, res) => {
 
         // Make sure we get userID from jswebtoken 
 
+        // Get currentPrice
+        let currentPrice; 
+        await yahooFinance.quote({
+            symbol: tickerName,
+            modules: ['price'] //summaryDetail
+        }, function(err, quotes) {
+            if(err)
+            {
+                return res.status(404).json("error");
+            } else {
+                 currentPrice = (quotes.price.regularMarketPrice).toFixed(2);
+            }
+        })
+        
+
+        console.log("currentPrice: " + currentPrice);
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name
@@ -103,15 +119,17 @@ export const getHistorical = async(req, res) => {
 
 // Currently use this to get current price
 export const yahooRealTime = async(req, res) => {
+
     yahooFinance.quote({
         symbol: 'KO',
-        modules: ['price', 'summaryDetail']
+        modules: ['price'] //summaryDetail
     }, function(err, quotes) {
         if(err)
         {
-            return res.status(4040).json("error");
+            return res.status(404).json("error");
         } else {
             return res.status(201).json(quotes); 
+            //return res.status(201).json(quotes.price.regularMarketPrice);
         }
     })
 }
