@@ -71,13 +71,36 @@ export const checkUserEntry = async(req, res) => {
     }
 }
 
-// View current user stock list. 
+// View old stock entries that already at least 1 day expired. Work in progress.
+export const oldStockEntries = async(req, res) => {
+    try {
+        // 1 day = 86,400,000 ms
+        const list = await stockEntry.findAll({
+            attributes: ['tickerName', 'prediction', 'timeFrame'],
+            where: {
+                userID: req.params.userID,
+                expirationAt: {
+                    [Op.lte]:
+                    Sequelize.fn('NOW').getTime() - 86400000,
+                }
+            }
+        });
+    } catch(e) 
+    {
+        res.status(500).send(e.message); 
+    }
+}
+// View current user stock list. Still work in progress
 export const userStockList = async(req, res) => {
     try {
         const list = await stockEntry.findAll({
-            attributes: ['tickerName'],
+            attributes: ['tickerName', 'prediciton', 'timeFrame'],
             where: {
-                userID: req.params.id
+                userID: req.params.id,
+                expirationAt: {
+                    [Op.gte]:
+                    Sequelize.fn('NOW').getTime() - 86400000
+                }
             }
         })
         // JSON.stringify(list, null, 2); 
