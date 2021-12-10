@@ -58,7 +58,23 @@ export const addStockEntry = async(req, res) => {
         }
         */
 
-        // Make sure we get userID from jswebtoken 
+        // ***Make sure we get userID from jswebtoken 
+
+        // Make sure prediction has valid input
+        if(prediction != ("Bullish" || "Bearish"))
+        {
+            return res.status(404).json({message: "Invalid prediction input"}); 
+        }
+        // Make sure timeFrame has valid input
+        if(timeFrame != ("EOD" || "EOW" || "EOM"))
+        {
+            return res.status(404).json({message: "Invalid timeFrame input"});
+        }
+        // Make sure confidentLevel has valid input 
+        if(confidentLevel >= 1 && confidentLevel <= 10)
+        {
+            return res.status(404).json({message: "Invalid confidentLevel input"});
+        }
 
         // Get currentPrice
         let currentPrice; 
@@ -76,7 +92,7 @@ export const addStockEntry = async(req, res) => {
 
         console.log("currentPrice: " + currentPrice);
 
-        let expirationAt = new Date("July 21, 1983 01:15:00"); 
+        let expirationAt = null; 
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name
