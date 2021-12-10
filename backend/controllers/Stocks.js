@@ -3,10 +3,17 @@ import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import StockSocket from 'stocksocket';
 import cts from 'check-ticker-symbol';
-import moment from 'moment-timezone';
-import { Sequelize } from "sequelize";
 
 // Get current user stock list. Still work in progress. 
+
+export const checkUserStockList = async(req, res) => {
+    try {
+
+    } catch(e)
+    {
+        res.stauts(500).send(e.message); 
+    }
+}
 export const userStockList = async(req, res) => {
     try {
         const list = await stockEntry.findAll({
@@ -71,10 +78,11 @@ export const addStockEntry = async(req, res) => {
             return res.status(404).json({message: "Invalid timeFrame input"});
         }
         // Make sure confidentLevel has valid input 
-        if(confidentLevel >= 1 && confidentLevel <= 10)
+        if(confidentLevel < 1 || confidentLevel > 10)
         {
             return res.status(404).json({message: "Invalid confidentLevel input"});
         }
+        
 
         // Get currentPrice
         let currentPrice; 
@@ -93,6 +101,7 @@ export const addStockEntry = async(req, res) => {
         console.log("currentPrice: " + currentPrice);
 
         let expirationAt = null; 
+
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name
@@ -118,13 +127,16 @@ export const addStockEntry = async(req, res) => {
         } 
 
 
-        const {checkEntryID, actualPrice, accuracy} = req.body; 
+        // Create newCheckEntry row for newStockEntry 
+        const {actualPrice, accuracy} = req.body; 
+        const checkEntryID = newStockEntry.entryID; 
 
         const newCheckEntry = await checkEntry.create({
             checkEntryID: checkEntryID,
             actualPrice: actualPrice,
             accuracy: accuracy
-        })
+        });
+
         console.log("Check Entry also added!"); 
 
     } catch (e) 

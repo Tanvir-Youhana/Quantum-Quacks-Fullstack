@@ -22,7 +22,6 @@
     "fetch": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "moment-timezone": "^0.5.34",
     "mysql2": "^2.3.3",
     "nodejs-stock-info": "^0.1.20",
     "sequelize": "^6.12.0-alpha.1",
