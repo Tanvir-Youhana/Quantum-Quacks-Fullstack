@@ -1,7 +1,6 @@
 import stockEntry from '../models/stockEntries.js';
 import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
-import StockSocket from 'stocksocket';
 import cts from 'check-ticker-symbol';
 import { Sequelize } from 'sequelize';
 
