@@ -1,0 +1,119 @@
+import axios from "axios";
+import db from "../config/database.js";
+import marketHolidays from "../models/marketHolidays.js";
+import trendingTickers from "../models/trendingTickers.js";
+import ipoCalendar from "../models/ipoCalendar.js";
+import earningCalendar from "../models/earningCalendar.js";
+import listingStatus from "../models/listingStatus.js";
+import dotenv  from "dotenv"
+
+dotenv.config()
+
+export const getListingStatus = async(req, res) => {
+    try {
+        const alphaVantageKey = process.env.alphaVantageKey; 
+        axios.get("https://www.alphavantage.co/query?function=LISTING_STATUS&date=2014-07-10&state=delisted&apikey=demo")
+        .then(response => {
+            listingStatus.bulkCreate(response.data);
+            console.log("TEST4: " + response.data); 
+            return res.json(response.data); 
+        })
+    } catch(e)
+    {
+        res.status(500).send(e.message); 
+    }
+}
+export const getEarningCalendar = async(req, res) => {
+    try {
+        const alphaVantageKey = process.env.alphaVantageKey; 
+        axios.get("https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&horizon=3month&apikey=demo")
+        .then(response => {
+            earningCalendar.bulkCreate(response.data);
+            console.log("TEST3: " + response.data); 
+            return res.json(response.data); 
+            
+        })
+    } catch(e) {
+        return res.status(500).send(e.message); 
+    }
+}
+
+export const getIPOCalendar = async(req, res) => {
+    try {
+        const alphaVantageKey = process.env.alphaVantageKey; 
+        axios.get("https://www.alphavantage.co/query?function=IPO_CALENDAR&apikey=demo")
+        .then(response => {
+            ipoCalendar.bulkCreate(response.data);
+            console.log("TEST2: " + response.data);
+            return res.json(response.data); 
+        })
+    } catch (e) {
+        return res.status(500).send(e.message); 
+    }
+}
+
+export const getMarketHolidays = async(req, res) => {
+    try {
+        const polygonKey = process.env.polygonKey; 
+        axios.get(`https://api.polygon.io/v1/marketstatus/upcoming?apiKey=${polygonKey}`)
+        .then(response => {
+            marketHolidays.bulkCreate(response.data); 
+            return res.json(response.data); 
+        }); 
+    } catch(e) {
+        res.status(500).send(e.message); 
+    }
+}
+
+export const getTrendingTickers = async(req, res) => {
+    try {
+        /*
+        const {symbol, name, lastPrice, change, percent_change} = req.body; 
+        const newTrendingTickers = await trendingTickers.create({
+            symbol: symbol,
+            name: name,
+            lastPrice: lastPrice, 
+            change: change, 
+            percent_change: percent_change
+        });
+        */
+
+        const options = {
+            method: 'GET',
+            url: 'https://yh-finance.p.rapidapi.com/market/get-trending-tickers',
+            params: {region: 'US'},
+            headers: {
+              'x-rapidapi-host': 'yh-finance.p.rapidapi.com',
+              'x-rapidapi-key': '0fc5c4eebfmsha6486809f8d8d5ep124d90jsnb134f7a3a10c'
+            }
+          };
+
+        await axios.request(options).then(function (response) {
+            /*
+            const newTrendingTickers = await trendingTickers.create({
+
+            })
+            */
+           /*
+           const data = response.data; 
+           const insert_columns = Object.keys(data[0]);
+           const insert_data = data.reduce((a,i) => [...a, Object.values(i)], []);
+        db.sequelize.query('INSERT INTO trending_tickers (??) VALUES ?', [insert_columns, insert_data], (error, output) => {
+               console.log(output);
+           })
+           */
+            //trendingTickers.bulkCreate((response.data.toString())); 
+            trendingTickers.bulkCreate(response.data.finance.result.quotes); 
+            console.log("TEST: " + response.data.finance.result.quotes); 
+            return res.status(201).json(response.data.finance.result.quotes); 
+
+
+            //res.status(201).json(response.data);
+        }).catch(function (error) {
+            console.error(error);
+        });
+    } catch (e)
+    {
+        res.status(500).send(e.message); 
+    }
+}

@@ -41,6 +41,8 @@ app.use(session({
         expires: 60 * 60 * 24,
     },
 }));
+
+//app.use('/', staticRoutes); 
 //app.use(bodyParser.urlencoded({extended: false}));  
 //app.use(bodyParser.json());
 app.use('/', userRoutes); 
