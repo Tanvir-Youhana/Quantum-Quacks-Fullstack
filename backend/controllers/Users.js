@@ -93,9 +93,13 @@ export const updatePassword = async (req, res) => {
   try {
     // Check if user did not type in the correct old password
     const { old_password, new_password, confirm_password } = req.body;
+    
+    //const user = await User.findOne({where: {email: }})
+    /*
     const old_pass = await User.findOne({
       where: { old_password: old_password },
     });
+    */
     if (!old_pass)
       res.json({ error: "The old password is incorrect! Please try again." });
 
