@@ -14,7 +14,8 @@ const DB_PORT = process.env.DB_PORT
 // Need to change credentials 
 const db = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, { // (Database_Name, User, Password)
     host: DB_HOST,
-    dialect: "mysql"
+    dialect: "mysql",
+    timezone: '-05:00'
 });
  
 export default db;

@@ -21,6 +21,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+
 export const register = async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
