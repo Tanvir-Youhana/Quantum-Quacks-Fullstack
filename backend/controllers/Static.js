@@ -5,7 +5,11 @@ import trendingTickers from "../models/trendingTickers.js";
 import ipoCalendar from "../models/ipoCalendar.js";
 import earningCalendar from "../models/earningCalendar.js";
 import listingStatus from "../models/listingStatus.js";
-import dotenv  from "dotenv"
+import dotenv  from "dotenv";
+//import csv from "csvtojson";
+//import csv from "csv"; 
+import fs from "fs";
+
 
 dotenv.config()
 
@@ -41,12 +45,28 @@ export const getEarningCalendar = async(req, res) => {
 export const getIPOCalendar = async(req, res) => {
     try {
         const alphaVantageKey = process.env.alphaVantageKey; 
-        axios.get("https://www.alphavantage.co/query?function=IPO_CALENDAR&apikey=demo")
+        const input = fs.createReadStream()
+        /*
+        csv()
+        .fromStream(axios.get("https://www.alphavantage.co/query?function=IPO_CALENDAR&apikey=demo"))
+        .subscribe((json)=> {
+            return new Promise((resolve, reject) => {
+                resolve() 
+                ipoCalendar.bulkCreate(json.data);
+                console.log("TEST2: " + json.data);
+                return res.json(json.data); 
+            })
+
+        });
+        */
+        //axios.get(cvsFilePath)
+        /*
         .then(response => {
             ipoCalendar.bulkCreate(response.data);
-            console.log("TEST2: " + response.data);
+            console.log("TEST2: " + JSON.parse(response.data));
             return res.json(response.data); 
         })
+        */
     } catch (e) {
         return res.status(500).send(e.message); 
     }
@@ -89,26 +109,33 @@ export const getTrendingTickers = async(req, res) => {
           };
 
         await axios.request(options).then(function (response) {
-            /*
-            const newTrendingTickers = await trendingTickers.create({
-
-            })
-            */
-           /*
+/*
            const data = response.data; 
            const insert_columns = Object.keys(data[0]);
            const insert_data = data.reduce((a,i) => [...a, Object.values(i)], []);
         db.sequelize.query('INSERT INTO trending_tickers (??) VALUES ?', [insert_columns, insert_data], (error, output) => {
                console.log(output);
            })
-           */
+  */         
             //trendingTickers.bulkCreate((response.data.toString())); 
-            trendingTickers.bulkCreate(response.data.finance.result.quotes); 
-            console.log("TEST: " + response.data.finance.result.quotes); 
-            return res.status(201).json(response.data.finance.result.quotes); 
+            //trendingTickers.bulkCreate(response.data.finance.result.quotes); 
 
-
-            //res.status(201).json(response.data);
+           const objs = response.data.finance.result[0].quotes;
+           
+           trendingTickers.bulkCreate(objs,{individualHooks: true})
+           .then(function() {
+               trendingTickers.findAll(); 
+           })
+           .then(function(response2) {
+               res.json(response2);
+           })
+           .catch(function(error) {
+               res.json(error); 
+           })
+           
+           
+           console.log("tEST TEST TEST TES"); 
+            //res.status(201).json(objs);
         }).catch(function (error) {
             console.error(error);
         });

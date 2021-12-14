@@ -9,22 +9,22 @@ const trendingTickers = db.define('trending_tickers',{
         allowNull: false,
         primaryKey: true,
     },
-    name: {
+    shortName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    lastPrice:{
-        type: DataTypes.DOUBLE,
+    regularMarketPrice:{
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false,
     },
 
-    change: {
-        type: DataTypes.DOUBLE, 
+    regularMarketChange: {
+        type: DataTypes.DECIMAL(10,2), 
         allowNull: false, 
     },
-    percent_change:
+    regularMarketChangePercent:
     {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.DECIMAL(10,2),
         allowNull: false, 
     },
 
