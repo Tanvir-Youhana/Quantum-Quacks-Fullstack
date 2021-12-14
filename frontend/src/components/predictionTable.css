@@ -1,0 +1,31 @@
+.bigContainer {
+  height: 700px;
+  display: flex;
+  padding: 20px;
+  border-radius: 35px;
+  margin-top: 20px;
+  flex-direction: row;
+}
+
+.leftContainer {
+  margin-right: 20px;
+  flex: 0.6;
+  border-radius: 30px;
+}
+
+.rightContainer {
+  margin-left: 30px;
+  flex: 0.4;
+  border-radius: 30px;
+}
+.label {
+  margin-bottom: 5px;
+  color: orange;
+  margin-left: 450px;
+}
+
+.label2 {
+  margin-bottom: 5px;
+  color: orange;
+  margin-left: 300px;
+}
