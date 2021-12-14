@@ -32,7 +32,7 @@ export const getEarningCalendar = async(req, res) => {
         const alphaVantageKey = process.env.alphaVantageKey; 
         axios.get("https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&horizon=3month&apikey=demo")
         .then(response => {
-            earningCalendar.bulkCreate(response.data);
+            //earningCalendar.bulkCreate(response.data);
             console.log("TEST3: " + response.data); 
             return res.json(response.data); 
             
@@ -132,9 +132,6 @@ export const getTrendingTickers = async(req, res) => {
            .catch(function(error) {
                res.json(error); 
            })
-           
-           
-           console.log("tEST TEST TEST TES"); 
             //res.status(201).json(objs);
         }).catch(function (error) {
             console.error(error);
