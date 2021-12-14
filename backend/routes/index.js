@@ -7,9 +7,10 @@ import {
     updateProduct,
     deleteProduct
 } from "../controllers/Products.js";
-import {getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
+import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
 import {checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
 import { getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers } from "../controllers/Static.js";
+import validateToken from "../middlewares/AuthMiddleware.js";
 
 const router = express.Router();
 
@@ -30,10 +31,11 @@ router.post('/entry/ticker', addStockEntry);
 router.get('/stock/:symbol', getHistorical); 
 
 // User Routes
+router.get('/auth', auth, validateToken);
 router.post('/login', login);
 router.get('/login', getLogin); 
 router.post('/register', register); 
-router.patch('/setting', updatePassword);
+router.put('/setting', updatePassword, validateToken);
 //router.get('/test', test);
 //router.get('/realtime', getRealTime); 
 //router.get('/', getAllProducts);

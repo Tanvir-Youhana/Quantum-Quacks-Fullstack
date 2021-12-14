@@ -6,7 +6,11 @@ import db from "../config/database.js";
 //const SECRET = "asbadbbdbbh7";
 import session from "express-session";
 import sign from "jsonwebtoken";
+//import { EmptyResultError } from "sequelize/dist";
 
+export const auth = async (req, res) => {
+  res.json(req.user); 
+}
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
@@ -71,11 +75,11 @@ export const login = async (req, res) => {
       if (!match)
         res.json({ error: "Wrong Username And Password Combination" });
 
-      const accessToken = jwt.sign(
+      const accessToken = sign(
         { email: user.email, id: user.id },
         "importantsecret"
       );
-      res.json(accessToken);
+      res.json({token: accessToken, email: email, id: user.id});
     });
   } catch (e) {
     res.status(500).send(e.message);
@@ -92,14 +96,26 @@ export const getLogin = async (req, res) => {
 export const updatePassword = async (req, res) => {
   try {
     // Check if user did not type in the correct old password
-    const { old_password, new_password, confirm_password } = req.body;
+    const { oldPassword, newPassword, confirmPassword } = req.body;
     
-    //const user = await User.findOne({where: {email: }})
+    const user = await User.findOne({where: {email: req.user.email} });
+
+    bcrypt.compare(oldPassword, user.password).then(async (match) => {
+      if(!match) res.json({error: "Old password is incorrect!"});
+
+      bcrypt.hash(newPassword, 10).then((hash) => {
+        User.update(
+          { password: hash },
+          {where: { email: req.user.email }}
+        );
+        res.json("Successfully updated password");
+      });
+    });
     /*
     const old_pass = await User.findOne({
       where: { old_password: old_password },
     });
-    */
+   
     if (!old_pass)
       res.json({ error: "The old password is incorrect! Please try again." });
 
@@ -127,6 +143,7 @@ export const updatePassword = async (req, res) => {
         },
       }
     );
+    */
     console.log("Update successful");
   } catch (e) {
     res.status(500).send(e.message);
