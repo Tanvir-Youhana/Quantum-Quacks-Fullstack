@@ -21,9 +21,10 @@ import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 const iconStyl = { fontSize: 35, color: "orange" };
 
 function UpdatePassword() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginStatus, setLoginStatus] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStatus, setPasswordStatus] = useState("");
 
   const paperStyle = {
     padding: 20,
@@ -35,17 +36,18 @@ function UpdatePassword() {
   const stylButn = { margin: "8px 0" };
   const stylField = { margin: "8px 0" };
 
-  const login = () => {
+  const updatePassword = () => {
     instance
-      .post("/login", {
-        email: email,
-        password: password,
+      .patch("/updatePassword", {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
       })
       .then((response) => {
         if (response.data.message) {
-          setLoginStatus(response.data.message);
+          setPasswordStatus(response.data.message);
         } else {
-          setLoginStatus(response.data[0].email);
+          setPasswordStatus(response.data[0].password);
         }
       });
   };
@@ -69,7 +71,7 @@ function UpdatePassword() {
               type="password"
               placeholder="Enter old password..."
               onChange={(e) => {
-                setEmail(e.target.value);
+                setOldPassword(e.target.value);
               }}
               fullWidth
               required
@@ -79,7 +81,7 @@ function UpdatePassword() {
               label="New Password"
               placeholder="Enter new password..."
               onChange={(e) => {
-                setPassword(e.target.value);
+                setNewPassword(e.target.value);
               }}
               type="password"
               fullWidth
@@ -90,7 +92,7 @@ function UpdatePassword() {
               label="Confirm Password"
               placeholder="Enter confirm password..."
               onChange={(e) => {
-                setPassword(e.target.value);
+                setConfirmPassword(e.target.value);
               }}
               type="password"
               fullWidth
@@ -101,7 +103,7 @@ function UpdatePassword() {
               type="submit"
               color="success"
               variant="contained"
-              onClick={login}
+              onClick={updatePassword}
               halfWidth
               style={stylButn}
             >

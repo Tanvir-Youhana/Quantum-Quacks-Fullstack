@@ -35,7 +35,7 @@ function App() {
               <Route path="/Home">
                 <Home />
             </Route>
-            <Route path= "/Update">
+            <Route path= "/setting">
               <UpdatePassword />
             </Route>
           </Switch>
