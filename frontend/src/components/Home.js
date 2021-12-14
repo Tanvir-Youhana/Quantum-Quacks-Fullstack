@@ -1,9 +1,11 @@
 import React from "react";
 import Navbar from "./Navbar";
-import "./Home.css";
+// import "./Home.css";
 // import Logo from './qq.png'
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { orange } from "@mui/material/colors";
+import PredictionTable from "./PredictionTable";
+// import testTable from "./testTable";
 function Home() {
   const iconStyl = { fontSize: 35, color: "orange" };
   return (
@@ -20,13 +22,16 @@ function Home() {
           </a>
         </div>
       </div> */}
+
       <div>
-          <Navbar/>
+        <Navbar />
       </div>
-      <div className="home_content">
-        <div className="home_graph">this is the graph</div>
-        <div className="home_StockList">this is the stock list</div>
+      <div>
+        <PredictionTable />
       </div>
+      {/* <div>
+        <testTable />
+      </div> */}
     </div>
   );
 }

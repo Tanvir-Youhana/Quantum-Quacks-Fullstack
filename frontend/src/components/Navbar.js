@@ -144,7 +144,7 @@ function Navbar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static ">
+      <AppBar position="static">
         <Toolbar>
           <div>
             <img src={Logo} width={80} />
