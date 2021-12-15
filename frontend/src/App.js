@@ -1,17 +1,46 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ProductList from "./components/ProductList";
-import AddProduct from "./components/AddProduct";
-import EditProduct from "./components/EditProduct";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Login from "./components/Login";
-import Registration from "./components/Registration";
 import Home from "./components/Home";
 import './components/App.css';
 import Logo from './qq.png'
 import UpdatePassword from "./components/UpdatePassword";
-
-
+import {useState, useEffect} from "react"; 
+import instance from "./axios";
+import AuthContext from "./helpers/AuthContext.js";
+import Registration from "./components/Registration.js";
+import PageNotFound from "./components/PageNotFound.js";
 
 function App() {
+  const [authState, setAuthState] = useState({
+    email: "",
+    id: 0,
+    status: false,
+  });
+
+  useEffect(() => {
+    instance.get("/", {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    })
+    .then((response) => {
+      if(response.data.error) {
+        setAuthState({ ...authState, status:false});
+      } else {
+        setAuthState({
+          email: response.data.email,
+          id: response.data.id,
+          status: true,
+        });
+      }
+    });
+  }, []);
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    setAuthState({email: "", id: 0, status: false});
+  };
+
   return (
       <div className="app">
         {/* <div className="app__header">
@@ -23,24 +52,37 @@ function App() {
           </div>
          
         </div> */}
-        
+        <AuthContext.Provider value={{ authState, setAuthState}}>
           <Router>
-          <Switch>
-            <Route exact path="/">
-            <Login />
-            </Route>
-              <Route path="/signup">
-                <Registration />
-            </Route>
-              <Route path="/Home">
-                <Home />
-            </Route>
-            <Route path= "/setting">
-              <UpdatePassword />
-            </Route>
-          </Switch>
+            <div className="navbar">
+              <div className="links">
+                {!authState.status ? (
+                  <>
+                    <Link to="/login">Login</Link>
+                    <Link to="/registeration">Registeration</Link>
+                  </>
+                ) : (
+                  <>
+                  <Link to="/"> HomePage</Link>
+                  </>
+                )} 
+              </div>
+              <div className="loggedInContainer">
+                <h1>{authState.email} </h1>
+                {authState.status && <button onClick={logout}> Logout</button>}
+              </div>
+            </div>
+            <Switch>
+              {/* <Route path="/" exact component={Home} /> */}
+              {/* <Route path="/login" exact component={Login} /> */}
+              <Route path="/" exact component={Login} />
+              <Route path="/Home" exact component={Home} /> 
+              <Route path="/signup" exact component={Registration} />
+              <Route path= "/setting" exact component={UpdatePassword} />
+              <Route path= "*" exact component={PageNotFound} /> 
+            </Switch>
           </Router>
-
+        </AuthContext.Provider>
       </div>
   );
 }

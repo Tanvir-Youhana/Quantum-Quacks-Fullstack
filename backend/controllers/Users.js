@@ -66,6 +66,7 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
+    console.log("login test");
     const { email, password } = req.body;
 
     const user = await User.findOne({ where: { email: email } });
@@ -80,7 +81,8 @@ export const login = async (req, res) => {
         { email: user.email, id: user.id },
         "importantsecret"
       );
-      return res.json({token: accessToken, email: email, id: user.id});
+      return res.json(accessToken); 
+      //return res.json({token: accessToken, email: email, id: user.id});
     });
   } catch (e) {
     return res.status(500).send(e.message);

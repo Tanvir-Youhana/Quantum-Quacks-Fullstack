@@ -10,17 +10,18 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+//import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+//import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "./UpdatePassword.css";
-import axios, { Axios } from "axios";
+//import axios, { Axios } from "axios";
 import instance from "../axios";
 import Navbar from "./Navbar";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 
-const iconStyl = { fontSize: 35, color: "orange" };
+//const iconStyl = { fontSize: 35, color: "orange" };
 
 function UpdatePassword() {
+  console.log("UPDATE 1");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -53,6 +54,7 @@ function UpdatePassword() {
           alert(response.data.error);
       }
     });
+
   };
 
   return (

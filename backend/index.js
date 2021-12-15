@@ -29,7 +29,7 @@ db.sync({force: true}).then(() => {
 */
 app.use(cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST", "PATCH", "DELETE"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
     credentials: true 
 }));
 app.use(cookieParser()); 
