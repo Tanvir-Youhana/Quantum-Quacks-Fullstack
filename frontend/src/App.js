@@ -1,9 +1,5 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ProductList from "./components/ProductList";
-import AddProduct from "./components/AddProduct";
-import EditProduct from "./components/EditProduct";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Login from "./components/Login";
-import Registration from "./components/Registration";
 import Home from "./components/Home";
 import "./components/App.css";
 import Logo from "./qq.png";
@@ -12,7 +8,38 @@ import MarketHoliday from "./components/MarketHoliday";
 import EarningCalendar from "./components/EarningCalendar";
 import IPOcalendar from "./components/IPOcalendar";
 import TrendingStock from "./components/TrendingStock";
+import {useState, useEffect} from "react"; 
+import instance from "./axios";
+import AuthContext from "./helpers/AuthContext.js";
+import Registration from "./components/Registration.js";
+import PageNotFound from "./components/PageNotFound.js";
+
 function App() {
+  const [authState, setAuthState] = useState({
+    email: "",
+    id: 0,
+    status: false,
+  });
+
+  useEffect(() => {
+    instance.get("/", {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    })
+    .then((response) => {
+      if(response.data.error) {
+        setAuthState({ ...authState, status:false});
+      } else {
+        setAuthState({
+          email: response.data.email,
+          id: response.data.id,
+          status: true,
+        });
+      }
+    });
+  }, []);
+
   return (
     <div className="app">
       {/* <div className="app__header">
@@ -24,66 +51,45 @@ function App() {
           </div>
          
         </div> */}
-
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <Registration />
-          </Route>
-          <Route path="/Home">
-            <Home />
-          </Route>
-          <Route path="/setting">
-            <UpdatePassword />
-          </Route>
-          <Route path="/marketHoliday">
-            <MarketHoliday />
-          </Route>
-          <Route path="/EarningCalendar">
-            <EarningCalendar />
-          </Route>
-          <Route path="/IPOcalendar">
-            <IPOcalendar />
-          </Route>
-          <Route path="/TrendingStock">
-            <TrendingStock />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
-  );
-}
-
-{
-  /*<Router>
-    <div className="container">
-      <div className="columns">
-        <div className="column is-half is-offset-one-quarter">
-          <Switch>
-            <Route exact path="/">
-              <ProductList />
-            </Route>
-            <Route path="/add">
-              <AddProduct />
-            </Route>
-            <Route path="/edit/:id">
-              <EditProduct />
-            </Route>
+        <AuthContext.Provider value={{ authState, setAuthState}}>
+          <Router>
             
-            <Route path="/login">
-            <Login />
-            </Route>
-              <Route path="/registration">
-                <Registration />
-            </Route>
-          </Switch>
-        </div>
+            {/* <div className="navbar">
+              <div className="links">
+                {!authState.status ? (
+                  <>
+                    <Link to="/login">Login</Link>
+                    <Link to="/registeration">Registeration</Link>
+                  </>
+                ) : (
+                  <>
+                  <Link to="/"> HomePage</Link>
+                  </>
+                )} 
+              </div>
+              <div className="loggedInContainer">
+                <h1>{authState.email} </h1>
+                {authState.status && <button onClick={logout}> Logout</button>}
+              </div>
+            </div> */}
+
+            <Switch>
+              {/* <Route path="/" exact component={Home} /> */}
+              {/* <Route path="/login" exact component={Login} /> */}
+              <Route path="/" exact component={Login} />
+              <Route path="/Home" exact component={Home} /> 
+              <Route path="/signup" exact component={Registration} />
+              <Route path= "/setting" exact component={UpdatePassword} />
+              <Route path= "/marketHoliday" exact component={MarketHoliday} />
+              <Route path = "/earningCalendar" exact component={EarningCalendar} /> 
+              <Route path= "/ipoCalendar" exact component={IPOcalendar} />
+              <Route path= "/trendingStock" exact component={TrendingStock} />
+              <Route path= "*" exact component={PageNotFound} /> 
+            </Switch>
+          </Router>
+        </AuthContext.Provider>
       </div>
-    </div>
-    </Router>*/
+  );
 }
 
 export default App;

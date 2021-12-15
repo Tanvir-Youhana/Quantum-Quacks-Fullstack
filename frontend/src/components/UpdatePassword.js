@@ -10,21 +10,21 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+//import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+//import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "./UpdatePassword.css";
-import axios, { Axios } from "axios";
+//import axios, { Axios } from "axios";
 import instance from "../axios";
 import Navbar from "./Navbar";
 import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 
-const iconStyl = { fontSize: 35, color: "orange" };
+//const iconStyl = { fontSize: 35, color: "orange" };
 
 function UpdatePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordStatus, setPasswordStatus] = useState("");
+  //const [passwordStatus, setPasswordStatus] = useState("");
 
   const paperStyle = {
     padding: 20,
@@ -37,19 +37,29 @@ function UpdatePassword() {
   const stylField = { margin: "8px 0" };
 
   const updatePassword = () => {
-    instance
-      .patch("/updatePassword", {
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-      })
-      .then((response) => {
-        if (response.data.message) {
-          setPasswordStatus(response.data.message);
+    try {
+      instance
+        .put("/setting", {
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
+        },
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          if (response.data.error) {
+            alert(response.data.error);
         } else {
-          setPasswordStatus(response.data[0].password);
+          alert(response.data.message);
         }
-      });
+      })
+  } catch(e)
+    {
+      console.log("Error Check: " + e); 
+    }
   };
 
   return (
@@ -107,7 +117,7 @@ function UpdatePassword() {
               halfWidth
               style={stylButn}
             >
-              Change Password
+              Update Password
             </Button>
           </Paper>
         </Grid>
