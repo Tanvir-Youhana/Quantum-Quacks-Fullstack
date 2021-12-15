@@ -13,6 +13,9 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Logo from "./qq.png";
 import { Link } from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import MarketHoliday from "./MarketHoliday";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -167,6 +170,24 @@ function Navbar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+          <Stack spacing={2} direction="row">
+            <Button variant="contained" component={Link} to="./marketHoliday">
+              Market Holiday
+            </Button>
+            <Button variant="contained" component={Link} to="./EarningCalendar">
+              Earning Calendar
+            </Button>
+            <Button variant="contained" component={Link} to="./IPOcalendar">
+              IPO Calendar
+            </Button>
+            <Button variant="contained" component={Link} to="./TrendingStock">
+              Trending Stock
+            </Button>
+            <Button variant="contained" component={Link} to="./Home">
+              Home
+            </Button>
+          </Stack>
+
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

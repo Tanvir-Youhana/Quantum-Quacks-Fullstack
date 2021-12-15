@@ -29,3 +29,48 @@
   color: orange;
   margin-left: 300px;
 }
+.app-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ffffff;
+  text-align: left;
+  padding: 8px;
+  font-size: 32px;
+  color: white;
+}
+
+th {
+  color: white;
+  background-color: rgb(117, 201, 250);
+}
+
+td {
+  color: white;
+  background-color: rgb(205, 235, 253);
+}
+
+form {
+  display: flex;
+  gap: 1px;
+}
+
+form td:last-child {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+form * {
+  background-color: rgb(19, 146, 146);
+  font-size: 14px;
+}
