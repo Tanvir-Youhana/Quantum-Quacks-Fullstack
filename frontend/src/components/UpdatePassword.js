@@ -52,6 +52,8 @@ function UpdatePassword() {
         .then((response) => {
           if (response.data.error) {
             alert(response.data.error);
+        } else {
+          alert(response.data.message);
         }
       })
   } catch(e)

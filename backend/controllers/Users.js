@@ -104,54 +104,24 @@ export const updatePassword = async (req, res) => {
     
     const user = await User.findOne({where: {email: req.user.email} });
 
-    console.log("Test1"); 
     bcrypt.compare(oldPassword, user.password).then(async (match) => {
       if(!match) return res.json({error: "Old password is incorrect!"});
 
-      console.log("Test2");
+    // Check if newPassword and confirmPassword are matching 
+    if(newPassword != confirmPassword) 
+    {
+      return res.json({error: "The new password and confirm password does not match"}); 
+    }
       bcrypt.hash(newPassword, 10).then((hash) => {
         User.update(
           { password: hash },
           {where: { email: req.user.email }}
         );
         console.log("Successfully updated password");
-        return res.json("Successfully updated password");
+        return res.json({message: "Successfully updated password!"});
       });
     });
-    /*
-    const old_pass = await User.findOne({
-      where: { old_password: old_password },
-    });
-   
-    if (!old_pass)
-      res.json({ error: "The old password is incorrect! Please try again." });
 
-    ///
-    if (req.body.password != req.session.password) {
-      console.log("Incorrect password!");
-      return res
-        .status(202)
-        .json({ message: "The old password is incorrect! Please try again." });
-    }
-
-    // Check if new password does not match confirm password
-    if (req.body.new_password != req.body.confirm_password) {
-      console.log("New password does not match with confirm password!");
-      return res.status(202).json({
-        message:
-          "The new password does not match with confirm password! Please try again.",
-      });
-    }
-    await User.update(
-      { password: req.body.new_password },
-      {
-        where: {
-          email: req.session.email,
-        },
-      }
-    );
-    */
-    //console.log("Update successful");
   } catch (e) {
     res.status(500).send(e.message);
   }

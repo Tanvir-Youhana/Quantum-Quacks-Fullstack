@@ -31,7 +31,7 @@ router.post('/entry/ticker', addStockEntry);
 router.get('/stock/:symbol', getHistorical); 
 
 // User Routes
-router.get('/auth', auth, validateToken);
+router.get('/auth', validateToken, auth);
 router.post('/login', login);
 router.get('/login', getLogin); 
 router.post('/register', register); 

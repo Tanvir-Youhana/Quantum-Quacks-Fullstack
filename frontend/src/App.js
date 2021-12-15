@@ -54,7 +54,8 @@ function App() {
         </div> */}
         <AuthContext.Provider value={{ authState, setAuthState}}>
           <Router>
-            <div className="navbar">
+            
+            {/* <div className="navbar">
               <div className="links">
                 {!authState.status ? (
                   <>
@@ -71,7 +72,8 @@ function App() {
                 <h1>{authState.email} </h1>
                 {authState.status && <button onClick={logout}> Logout</button>}
               </div>
-            </div>
+            </div> */}
+
             <Switch>
               {/* <Route path="/" exact component={Home} /> */}
               {/* <Route path="/login" exact component={Login} /> */}
