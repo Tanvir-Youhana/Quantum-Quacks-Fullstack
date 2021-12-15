@@ -21,7 +21,6 @@ import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 //const iconStyl = { fontSize: 35, color: "orange" };
 
 function UpdatePassword() {
-  console.log("UPDATE 1");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -38,23 +37,27 @@ function UpdatePassword() {
   const stylField = { margin: "8px 0" };
 
   const updatePassword = () => {
-    instance
-      .put("/setting", {
-        oldPassword: oldPassword,
-        newPassword: newPassword,
-        confirmPassword: confirmPassword,
-      },
-      {
-        headers: {
-          accessToken: localStorage.getItem("accessToken"),
+    try {
+      instance
+        .put("/setting", {
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+          confirmPassword: confirmPassword,
         },
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          if (response.data.error) {
+            alert(response.data.error);
+        }
       })
-      .then((response) => {
-        if (response.data.error) {
-          alert(response.data.error);
-      }
-    });
-
+  } catch(e)
+    {
+      console.log("Error Check: " + e); 
+    }
   };
 
   return (

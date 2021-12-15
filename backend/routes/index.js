@@ -35,7 +35,7 @@ router.get('/auth', auth, validateToken);
 router.post('/login', login);
 router.get('/login', getLogin); 
 router.post('/register', register); 
-router.put('/setting', updatePassword, validateToken);
+router.put('/setting', validateToken, updatePassword);
 //router.get('/test', test);
 //router.get('/realtime', getRealTime); 
 //router.get('/', getAllProducts);

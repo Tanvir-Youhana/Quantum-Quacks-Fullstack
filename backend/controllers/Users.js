@@ -29,6 +29,7 @@ export const getAllUsers = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
+    console.log("register start");
     const { first_name, last_name, email, password } = req.body;
     
     // Check if email already exist
@@ -105,7 +106,7 @@ export const updatePassword = async (req, res) => {
 
     console.log("Test1"); 
     bcrypt.compare(oldPassword, user.password).then(async (match) => {
-      if(!match) res.json({error: "Old password is incorrect!"});
+      if(!match) return res.json({error: "Old password is incorrect!"});
 
       console.log("Test2");
       bcrypt.hash(newPassword, 10).then((hash) => {
@@ -114,7 +115,7 @@ export const updatePassword = async (req, res) => {
           {where: { email: req.user.email }}
         );
         console.log("Successfully updated password");
-        res.json("Successfully updated password");
+        return res.json("Successfully updated password");
       });
     });
     /*
