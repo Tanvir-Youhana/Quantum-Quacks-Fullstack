@@ -65,20 +65,20 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ where: { email: email } });
 
-    if (!user) res.json({ error: "User Doesn't Exist" });
+    if (!user) return res.json({ error: "User Doesn't Exist" });
 
     bcrypt.compare(password, user.password).then((match) => {
       if (!match)
-        res.json({ error: "Wrong Username And Password Combination" });
+        return res.json({ error: "Wrong Username And Password Combination" });
 
       const accessToken = jwt.sign(
         { email: user.email, id: user.id },
         "importantsecret"
       );
-      res.json(accessToken);
+      return res.json(accessToken);
     });
   } catch (e) {
-    res.status(500).send(e.message);
+    return res.status(500).send(e.message);
   }
 };
 
@@ -100,9 +100,10 @@ export const updatePassword = async (req, res) => {
       where: { old_password: old_password },
     });
     */
+   /*
     if (!old_pass)
       res.json({ error: "The old password is incorrect! Please try again." });
-
+*/
     ///
     if (req.body.password != req.session.password) {
       console.log("Incorrect password!");
