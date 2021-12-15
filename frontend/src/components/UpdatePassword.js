@@ -24,7 +24,7 @@ function UpdatePassword() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordStatus, setPasswordStatus] = useState("");
+  //const [passwordStatus, setPasswordStatus] = useState("");
 
   const paperStyle = {
     padding: 20,
@@ -38,18 +38,21 @@ function UpdatePassword() {
 
   const updatePassword = () => {
     instance
-      .patch("/updatePassword", {
+      .put("/setting", {
         oldPassword: oldPassword,
         newPassword: newPassword,
         confirmPassword: confirmPassword,
+      },
+      {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
       })
       .then((response) => {
-        if (response.data.message) {
-          setPasswordStatus(response.data.message);
-        } else {
-          setPasswordStatus(response.data[0].password);
-        }
-      });
+        if (response.data.error) {
+          alert(response.data.error);
+      }
+    });
   };
 
   return (
@@ -107,7 +110,7 @@ function UpdatePassword() {
               halfWidth
               style={stylButn}
             >
-              Change Password
+              Update Password
             </Button>
           </Paper>
         </Grid>

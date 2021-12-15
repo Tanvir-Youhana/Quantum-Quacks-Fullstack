@@ -5,10 +5,11 @@ import _ from "lodash";
 import db from "../config/database.js";
 //const SECRET = "asbadbbdbbh7";
 import session from "express-session";
-import sign from "jsonwebtoken";
+//import sign from "jsonwebtoken";
 //import { EmptyResultError } from "sequelize/dist";
 
-export const auth = async (req, res) => {
+export const auth = (req, res) => {
+  console.log("auth test");
   res.json(req.user); 
 }
 export const getAllUsers = async (req, res) => {
@@ -29,8 +30,8 @@ export const getAllUsers = async (req, res) => {
 export const register = async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body;
+    
     // Check if email already exist
-
     const isEmailExist = await User.findOne({ where: { email: email } }).catch(
       (err) => {
         console.log("Error: ", err);
@@ -73,16 +74,16 @@ export const login = async (req, res) => {
 
     bcrypt.compare(password, user.password).then((match) => {
       if (!match)
-        res.json({ error: "Wrong Username And Password Combination" });
+        return res.json({ error: "Wrong Username And Password Combination" });
 
-      const accessToken = sign(
+      const accessToken = jwt.sign(
         { email: user.email, id: user.id },
         "importantsecret"
       );
-      res.json({token: accessToken, email: email, id: user.id});
+      return res.json({token: accessToken, email: email, id: user.id});
     });
   } catch (e) {
-    res.status(500).send(e.message);
+    return res.status(500).send(e.message);
   }
 };
 
@@ -100,14 +101,17 @@ export const updatePassword = async (req, res) => {
     
     const user = await User.findOne({where: {email: req.user.email} });
 
+    console.log("Test1"); 
     bcrypt.compare(oldPassword, user.password).then(async (match) => {
       if(!match) res.json({error: "Old password is incorrect!"});
 
+      console.log("Test2");
       bcrypt.hash(newPassword, 10).then((hash) => {
         User.update(
           { password: hash },
           {where: { email: req.user.email }}
         );
+        console.log("Successfully updated password");
         res.json("Successfully updated password");
       });
     });
@@ -144,7 +148,7 @@ export const updatePassword = async (req, res) => {
       }
     );
     */
-    console.log("Update successful");
+    //console.log("Update successful");
   } catch (e) {
     res.status(500).send(e.message);
   }
