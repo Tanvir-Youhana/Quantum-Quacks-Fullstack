@@ -244,17 +244,71 @@ export const addStockEntry = async(req, res) => {
 export const getHistorical = async(req, res) => {
     yahooFinance.historical({
         symbol: req.params.symbol, // req.params.symbol 
-        from: '2021-12-01',
-        to: '2021-12-08',
+        from: '2015-01-01',
+        to: '2021-12-16',
     }, function(err, quotes) {
         if(err)
         {
             return res.status(404).json("error");
         } else {
-            return res.status(201).json(quotes); 
+            
+            const result = quotes.map(function(e) {
+                const timestamp = Date.parse(e.date);
+                const close = e.close.toFixed(2); 
+                return [timestamp, close]; 
+            })
+            //const date = quotes[1].date;
+           // const timestamp = Date.parse(date);
+
+            //const close = quotes[1].close; 
+
+            //console.log("Date: " +  timestamp);
+            //console.log("Close: " + close); 
+            //console.log(result); 
+
+            return res.status(201).json(result); 
         }
     })
 }
+
+export const chartTest = async(req, res) => {
+    yahooFinance.historical({
+        symbol: "AAPL", // req.params.symbol 
+        from: '2021-01-01',
+        to: '2021-12-16',
+    }, function(err, quotes) {
+        if(err)
+        {
+            return res.status(404).json("error");
+        } else {
+            
+            const result = quotes.map(function(e) {
+                const timestamp = Date.parse(e.date);
+                const open = parseFloat(e.open.toFixed(2)); 
+                const high = parseFloat(e.high.toFixed(2));
+                const low = parseFloat(e.low.toFixed(2));
+                const close = parseFloat(e.close.toFixed(2)); 
+                const volume = e.volume; 
+                return [timestamp, open, high, low, close, volume]; 
+            })
+            //const date = quotes[1].date;
+           // const timestamp = Date.parse(date);
+
+            //const close = quotes[1].close; 
+
+            //console.log("Date: " +  timestamp);
+            //console.log("Close: " + close); 
+            //console.log(result); 
+
+            const sorted = result.sort(function(a,b) { 
+                return a[0] - b[0];
+            })
+            return res.status(201).json(sorted); 
+        }
+    })
+}
+
+
 
 // Currently use this to get current price
 export const yahooRealTime = async(req, res) => {
