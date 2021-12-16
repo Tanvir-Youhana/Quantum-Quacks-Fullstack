@@ -9,8 +9,7 @@ import {
 } from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
 import {checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
-import { getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
-import { getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays, retrieveTrendingTickers } from "../controllers/Static.js";
+import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
 import validateToken from "../middlewares/AuthMiddleware.js";
 
 const router = express.Router();

@@ -14,7 +14,7 @@ const ipoCalendar = db.define('ipo_calendar',{
         allowNull: false,
     },
     ipoDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
         allowNull: true,
     },
     priceRangeLow: {
