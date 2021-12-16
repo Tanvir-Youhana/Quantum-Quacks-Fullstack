@@ -64,9 +64,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const[input, setInput]= React.useState("");
-  const{ticker} = useParams();
-  
+  const [input, setInput] = React.useState("");
+  const { ticker } = useParams();
+
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -152,18 +152,8 @@ function Navbar() {
   );
   let history = useHistory();
   const getTicker = () => {
-    var url =  + searchInput + "&red";
-    // let path ='/chart/${ticker}'; 
-    // history.push(path);
-//     if (input === null) {
-//       console.log("Do nothing");
-//   } else {
-//       history.push({
-// pathname: "/chart",// Current Path
-// search: "?input"// Your Param needed
-// });
-//   }
-
+    const ticker = input.toUpperCase();
+    history.push("/chart/" + ticker + "");
   };
 
   return (
@@ -183,20 +173,28 @@ function Navbar() {
             Quantum Quacks
           </Typography>
           <Search>
-            <SearchIconWrapper >
+            <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              value={input} onChange={(event) => {
+              value={input}
+              onChange={(event) => {
                 setInput(event.target.value);
-                }}
+              }}
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
           <Stack spacing={2} direction="row">
-          <Button disabled={!input} type= "submit" onClick={getTicker} variant="contained">Search</Button>
-            <Button variant="contained"  component={Link} to="/marketHoliday">
+            <Button
+              disabled={!input}
+              type="submit"
+              onClick={getTicker}
+              variant="contained"
+            >
+              Search
+            </Button>
+            <Button variant="contained" component={Link} to="/marketHoliday">
               Market Holiday
             </Button>
             <Button variant="contained" component={Link} to="/EarningCalendar">
