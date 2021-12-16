@@ -12,10 +12,18 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import instance from "../axios";
+import { useState, useEffect } from "react";
 
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
-
+  const [tickerName, setTickerName] = useState("");
+  const [prediction, setPrediction] = useState("");
+  const [timeFrame, setTimeFrame] = useState("");
+  const [confidentLevel, setConfidentLevel] = useState("");
+  const [description, setDescription] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -23,6 +31,34 @@ export default function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleClose2 = () => {
+    instance
+      .post("/entry/ticker", {
+        tickerName: tickerName,
+        prediction: prediction,
+        timeFrame: timeFrame,
+        confidentLevel: confidentLevel,
+        description: description,
+        priceRange: priceRange,
+      })
+      // .then((response) => {
+      //   if (response.data.message) {
+      //     setaddStatus(response.data.message);
+      //   } else {
+      //     console.log("success")
+      //   }});
+    setOpen(false);
+  };
+  
+  // useEffect(() => {
+  //   instance.get("/entry/ticker").then((response) => {
+  //     if (response.data.loggedIn === true)
+  //       setLoginStatus(response.data.email[0].email);
+  //     console.log(response);
+  //   });
+  // }, []);
+  
 
   return (
     <div>
@@ -41,6 +77,9 @@ export default function FormDialog() {
             placeholder="Enter Ticker name  ex: APPL"
             fullWidth
             variant="standard"
+            onChange={(e) => {
+              setTickerName(e.target.value);
+            }}
           />
 
           <FormControl component="fieldset">
@@ -54,11 +93,17 @@ export default function FormDialog() {
                 value="Bullish"
                 control={<Radio />}
                 label="Bullish"
+                onClick={(e) => {
+                  setPrediction(e.target.value);
+                }}
               />
               <FormControlLabel
                 value="Bearish"
                 control={<Radio />}
                 label="Bearish"
+                onClick={(e) => {
+                  setPrediction(e.target.value);
+                }}
               />
             </RadioGroup>
           </FormControl>
@@ -70,21 +115,32 @@ export default function FormDialog() {
               aria-label="Time frame"
               name="row-radio-buttons-group"
             >
-              <FormControlLabel value="EOD" control={<Radio />} label="EOD" />
-              <FormControlLabel value="EOW" control={<Radio />} label="EOW" />
-              <FormControlLabel value="EOM" control={<Radio />} label="EOM" />
+              <FormControlLabel value="EOD" control={<Radio />} label="EOD" 
+              onClick={(e) => {
+                setTimeFrame(e.target.value);
+              }}/>
+              <FormControlLabel value="EOW" control={<Radio />} label="EOW" 
+              onClick={(e) => {
+                setTimeFrame(e.target.value);
+              }}/>
+              <FormControlLabel value="EOM" control={<Radio />} label="EOM" 
+              onClick={(e) => {
+                setTimeFrame(e.target.value);
+              }}/>
             </RadioGroup>
           </FormControl>
 
           <TextField
             autoFocus
             margin="dense"
-            id="name"
             label="Confident Level"
             type="number"
             fullWidth
             variant="standard"
             placeholder="Enter a confident level from 1 to 10"
+            onChange={(e) => {
+              setConfidentLevel(e.target.value);
+            }}
           />
 
           <TextField
@@ -94,6 +150,9 @@ export default function FormDialog() {
             fullWidth
             variant="standard"
             placeholder="Enter Description"
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
           />
 
           <TextField
@@ -103,11 +162,14 @@ export default function FormDialog() {
             fullWidth
             variant="standard"
             placeholder="Enter Price Range..."
+            onChange={(e) => {
+              setPriceRange(e.target.value);
+            }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button onClick={handleClose2}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>
