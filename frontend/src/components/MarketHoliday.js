@@ -16,16 +16,16 @@ export default function MarketHoliday() {
   const columns = useMemo(
     () => [
     {
-      Header: "Exchange",
-      accessor: "exchange",
-    },
-    {
       Header: "Name",
       accessor: "name",
     },
     {
       Header: "Date",
       accessor: "date",
+    },
+    {
+      Header: "Exchange",
+      accessor: "exchange",
     },
   ], []); 
 
