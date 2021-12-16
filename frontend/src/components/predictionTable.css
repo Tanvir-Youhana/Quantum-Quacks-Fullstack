@@ -38,7 +38,9 @@
 
 table {
   border-collapse: collapse;
-  width: 100%;
+  width: 90%;
+  margin:auto;
+  background-color: black !important;
 }
 
 th,
@@ -46,8 +48,9 @@ td {
   border: 1px solid #ffffff;
   text-align: left;
   padding: 8px;
-  font-size: 32px;
+  /* font-size: 10rem; */
   color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 th {
@@ -63,14 +66,26 @@ td {
 form {
   display: flex;
   gap: 1px;
+  background-color: black;
 }
 
-form td:last-child {
+/* form td:last-child {
   display: flex;
   justify-content: space-evenly;
-}
+} */
 
 form * {
-  background-color: rgb(19, 146, 146);
-  font-size: 14px;
+  background-color: #064663;
+  font-size: 1.5rem;
+  
+}
+
+.title {
+  color: lightblue;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }

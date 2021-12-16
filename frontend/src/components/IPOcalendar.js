@@ -7,7 +7,7 @@ import {useState, useMemo, useEffect} from "react";
 //import axios from "axios";
 import { useTable } from "react-table";
 import Table from "./Table"; 
-
+import "./predictionTable.css";
 
 function IPOcalendar() {
 
