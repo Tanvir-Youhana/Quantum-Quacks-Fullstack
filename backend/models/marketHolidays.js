@@ -19,7 +19,7 @@ const marketHolidays = db.define('market_holidays',{
         allowNull: true,
     },
     date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: true 
     },
 }, {
