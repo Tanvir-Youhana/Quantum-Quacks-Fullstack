@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import HighStock from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import instance from "../axios";
+import { useParams } from "react-router-dom";
 
 function SearchStock2() {
 
+    const {ticker} = useParams(); 
     const [data, setData] = useState([]);
     const [loadingData, setLoadingData] = useState(true); 
 
@@ -37,7 +39,7 @@ function SearchStock2() {
         },
       
         title: {
-          text: "AAPL Historical"
+          text: ticker + " Historical Chart"
         },
       
         yAxis: [
