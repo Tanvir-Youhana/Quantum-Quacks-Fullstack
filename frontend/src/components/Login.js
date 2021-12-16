@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import {
   Grid,
@@ -54,7 +55,7 @@ function Login() {
     const data = { email: email, password: password };
     instance.post("/login", data).then((response) => {
       if (response.data.error) {
-        alert(response.data.error);
+        Swal.fire({ icon: "error", title: response.data.error });
       } else {
         localStorage.setItem("accessToken", response.data);
         history.push("/Home");

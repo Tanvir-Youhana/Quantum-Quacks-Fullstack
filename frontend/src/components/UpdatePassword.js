@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import Logo from "./qq.png";
 import {
@@ -39,26 +40,28 @@ function UpdatePassword() {
   const updatePassword = () => {
     try {
       instance
-        .put("/setting", {
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-          confirmPassword: confirmPassword,
-        },
-        {
-          headers: {
-            accessToken: localStorage.getItem("accessToken"),
+        .put(
+          "/setting",
+          {
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword,
           },
-        })
+          {
+            headers: {
+              accessToken: localStorage.getItem("accessToken"),
+            },
+          }
+        )
         .then((response) => {
           if (response.data.error) {
-            alert(response.data.error);
-        } else {
-          alert(response.data.message);
-        }
-      })
-  } catch(e)
-    {
-      console.log("Error Check: " + e); 
+            Swal.fire({ icon: "error", title: response.data.error });
+          } else {
+            Swal.fire({ icon: "success", title: response.data.message });
+          }
+        });
+    } catch (e) {
+      console.log("Error Check: " + e);
     }
   };
 

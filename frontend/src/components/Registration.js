@@ -1,4 +1,5 @@
 import React from "react";
+import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import {
   Grid,
@@ -31,9 +32,9 @@ function Registration() {
       })
       .then((response) => {
         if (response.data.error) {
-          alert(response.data.error);
+          Swal.fire({ icon: "error", title: response.data.error });
         } else {
-          alert(response.data.message);
+          Swal.fire({ icon: "success", title: response.data.message });
         }
       });
   };
