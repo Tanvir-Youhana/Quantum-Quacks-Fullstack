@@ -95,6 +95,31 @@ export const retrieveMarketHolidays = async(req, res) => {
     }
 }
 
+
+export const retrieveipoCalendar = async(req, res) => {
+    try {
+        const data = await ipoCalendar.findAll();
+        return res.status(201).send(data); 
+
+
+    } catch(e) {
+        res.status(500).send(e.message); 
+    }
+}
+
+
+export const retrieveEarningCalendar = async(req, res) => {
+    try {
+        const data = await earningCalendar.findAll();
+        return res.status(201).send(data); 
+
+
+    } catch(e) {
+        res.status(500).send(e.message); 
+    }
+}
+
+
 export const getTrendingTickers = async(req, res) => {
     try {
         /*

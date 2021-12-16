@@ -2,43 +2,80 @@ import React from "react";
 import Navbar from "./Navbar";
 import { Paper } from "@mui/material";
 import "./EarningCalendar.css";
+import instance from "../axios"; 
+import {useState, useMemo, useEffect} from "react"; 
+//import axios from "axios";
+import { useTable } from "react-table";
+import Table from "./Table"; 
+
+
 
 function EarningCalendar() {
+  // exchange name date
+  const [data, setData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true); 
+
+  const columns = useMemo(
+    () => [
+    {
+      Header: "Symbol",
+      accessor: "symbol",
+    },
+    {
+      Header: "Name",
+      accessor: "name",
+    },
+    
+    {
+      Header: "Report Date",
+      accessor: "reportDate",
+    },
+    {
+      Header: "Fiscal Date Ending",
+      accessor: "fiscalDateEnding",
+    },
+    {
+      Header: "Estimate",
+      accessor: "estimate",
+    },
+    {
+      Header: "Curreny",
+      accessor: "currency",
+    },
+  ], []); 
+
+
+
+  useEffect(() => {
+    async function getData() {
+      await instance
+        .get("/retrieveEarningCalendar")
+        .then((response) => {
+
+          console.log(response.data);
+          setData(response.data);
+          setLoadingData(false);
+        });
+    }
+    if (loadingData) {
+      getData();
+    }
+  }, []);
+
+
   return (
     <div>
       <div>
-        <Navbar />
-      </div>
-      <div className="title">EARNING CALENDAR</div>
-      <div className="table">
-        <Paper>
-          <form>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Phone Number</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>Tanvir</td>
-                  <td>Bronx</td>
-                  <td>911939494</td>
-                  <td>mdislam@islam.com</td>
-                  <td>santaslittlehelper</td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </Paper>
-      </div>
-    </div>
-  );
+        <Navbar /> 
+      </div> 
+      <div className="title"> EARNING CALENDAR </div> 
+      <Paper>
+        <form> 
+        <Table columns={columns} data={data} />
+        </form>
+      </Paper>
+    </div> 
+    );
 }
 
 export default EarningCalendar;
