@@ -151,3 +151,14 @@ export const getTrendingTickers = async(req, res) => {
         res.status(500).send(e.message); 
     }
 }
+
+export const retrieveTrendingTickers = async(req, res) => {
+    try {
+        const data = await trendingTickers.findAll();
+        return res.status(201).send(data); 
+
+
+    } catch(e) {
+        res.status(500).send(e.message); 
+    }
+}
