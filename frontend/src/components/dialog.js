@@ -33,6 +33,18 @@ export default function FormDialog() {
   };
 
   const handleClose2 = () => {
+
+    // Check input 
+    console.log(
+      "tickerName: " + tickerName, 
+      "prediction: " + prediction, 
+      "timeFrame: " + timeFrame, 
+      "confidentLevel: " + confidentLevel, 
+      "description: " + description, 
+      "priceRange: " + priceRange
+    )
+
+    /*
     instance
       .post("/entry/ticker", {
         tickerName: tickerName,
@@ -42,6 +54,7 @@ export default function FormDialog() {
         description: description,
         priceRange: priceRange,
       })
+      */
       // .then((response) => {
       //   if (response.data.message) {
       //     setaddStatus(response.data.message);
