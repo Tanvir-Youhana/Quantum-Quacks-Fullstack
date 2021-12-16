@@ -17,6 +17,9 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import MarketHoliday from "./MarketHoliday";
 import "./Navbar.css";
+import { useHistory } from "react-router-dom";
+import instance from "../axios";
+import { useParams } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -61,7 +64,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const[input, setInput]= React.useState("");
+  const{ticker} = useParams();
+  
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -145,6 +150,21 @@ function Navbar() {
       </MenuItem>
     </Menu>
   );
+  let history = useHistory();
+  const getTicker = () => {
+    var url =  + searchInput + "&red";
+    // let path ='/chart/${ticker}'; 
+    // history.push(path);
+//     if (input === null) {
+//       console.log("Do nothing");
+//   } else {
+//       history.push({
+// pathname: "/chart",// Current Path
+// search: "?input"// Your Param needed
+// });
+//   }
+
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -163,15 +183,19 @@ function Navbar() {
             Quantum Quacks
           </Typography>
           <Search>
-            <SearchIconWrapper>
+            <SearchIconWrapper >
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
+              value={input} onChange={(event) => {
+                setInput(event.target.value);
+                }}
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
           <Stack spacing={2} direction="row">
+          <Button disabled={!input} type= "submit" onClick={getTicker} variant="contained">Search</Button>
             <Button variant="contained"  component={Link} to="/marketHoliday">
               Market Holiday
             </Button>
