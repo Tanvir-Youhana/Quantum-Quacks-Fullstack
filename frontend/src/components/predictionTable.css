@@ -66,7 +66,7 @@ td {
 form {
   display: flex;
   gap: 1px;
-  background-color: black;
+  background-color: #001a34 !important;
 }
 
 /* form td:last-child {
@@ -75,7 +75,8 @@ form {
 } */
 
 form * {
-  background-color: #064663;
+  background-color: #04293A
+  ;
   font-size: 1.5rem;
   
 }
