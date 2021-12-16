@@ -8,8 +8,8 @@ import session from "express-session";
 
 export const auth = (req, res) => {
   console.log("auth test");
-  res.json(req.user); 
-}
+  res.json(req.user);
+};
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
@@ -24,12 +24,11 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-
 export const register = async (req, res) => {
   try {
     console.log("register start");
     const { first_name, last_name, email, password } = req.body;
-    
+
     // Check if email already exist
     const isEmailExist = await User.findOne({ where: { email: email } }).catch(
       (err) => {
@@ -37,7 +36,7 @@ export const register = async (req, res) => {
       }
     );
     if (isEmailExist) {
-      return res.status(202).json({ message: "Email has already been taken." });
+      return res.status(202).json({ error: "Email has already been taken." });
     }
     bcrypt.hash(password, 10).then((hash) => {
       User.create({
@@ -46,7 +45,7 @@ export const register = async (req, res) => {
         email: email,
         password: hash,
       });
-      res.json("User created!");
+      res.json({ message: "Registration Successful" });
     });
 
     // const newUser = new User({first_name, last_name, email, password});
@@ -80,7 +79,7 @@ export const login = async (req, res) => {
         { email: user.email, id: user.id },
         "importantsecret"
       );
-      return res.json(accessToken); 
+      return res.json(accessToken);
       //return res.json({token: accessToken, email: email, id: user.id});
     });
   } catch (e) {
@@ -99,27 +98,24 @@ export const updatePassword = async (req, res) => {
   try {
     // Check if user did not type in the correct old password
     const { oldPassword, newPassword, confirmPassword } = req.body;
-    
-    const user = await User.findOne({where: {email: req.user.email} });
+
+    const user = await User.findOne({ where: { email: req.user.email } });
 
     bcrypt.compare(oldPassword, user.password).then(async (match) => {
-      if(!match) return res.json({error: "Old password is incorrect!"});
+      if (!match) return res.json({ error: "Old password is incorrect!" });
 
-    // Check if newPassword and confirmPassword are matching 
-    if(newPassword != confirmPassword) 
-    {
-      return res.json({error: "The new password and confirm password does not match"}); 
-    }
+      // Check if newPassword and confirmPassword are matching
+      if (newPassword != confirmPassword) {
+        return res.json({
+          error: "The new password and confirm password does not match",
+        });
+      }
       bcrypt.hash(newPassword, 10).then((hash) => {
-        User.update(
-          { password: hash },
-          {where: { email: req.user.email }}
-        );
+        User.update({ password: hash }, { where: { email: req.user.email } });
         console.log("Successfully updated password");
-        return res.json({message: "Successfully updated password!"});
+        return res.json({ message: "Successfully updated password!" });
       });
     });
-
   } catch (e) {
     res.status(500).send(e.message);
   }

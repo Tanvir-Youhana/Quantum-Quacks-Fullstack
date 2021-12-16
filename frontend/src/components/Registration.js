@@ -30,10 +30,10 @@ function Registration() {
         last_name: last_name_Reg,
       })
       .then((response) => {
-        if (response.data.message) {
-          setRegisterStatus(response.data.message);
+        if (response.data.error) {
+          alert(response.data.error);
         } else {
-          setRegisterStatus(response.data[0].email);
+          alert(response.data.message);
         }
       });
   };
