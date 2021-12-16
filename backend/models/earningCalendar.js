@@ -14,18 +14,18 @@ const earningCalendar = db.define('earning_calendar',{
         allowNull: false,
     },
     reportDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     fiscalDateEnding: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true 
     },
     estimate: {
         type: DataTypes.DOUBLE,
         allowNull: true, 
     },
-    exchange: {
+    currency: {
         type: DataTypes.STRING,
         allowNull: true, 
     }
