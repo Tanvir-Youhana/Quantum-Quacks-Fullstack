@@ -33,7 +33,6 @@ export const getEarningCalendar = async(req, res) => {
         axios.get("https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&horizon=3month&apikey=demo")
         .then(response => {
             //earningCalendar.bulkCreate(response.data);
-            console.log("TEST3: " + response.data); 
             return res.json(response.data); 
             
         })
@@ -80,6 +79,17 @@ export const getMarketHolidays = async(req, res) => {
             marketHolidays.bulkCreate(response.data); 
             return res.json(response.data); 
         }); 
+    } catch(e) {
+        res.status(500).send(e.message); 
+    }
+}
+
+export const retrieveMarketHolidays = async(req, res) => {
+    try {
+        const data = await marketHolidays.findAll();
+        return res.status(201).send(data); 
+
+
     } catch(e) {
         res.status(500).send(e.message); 
     }
