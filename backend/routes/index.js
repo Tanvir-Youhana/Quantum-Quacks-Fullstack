@@ -34,8 +34,7 @@ router.get('/oldStockEntries', oldStockEntries);
 router.get('/yahooRealTime', yahooRealTime); 
 router.get('/:id/stocklist', userStockList); 
 router.post('/entry/ticker', addStockEntry);
-router.get('/stock/:symbol', getHistorical); 
-
+router.get('/stock/:symbol', getHistorical);
 
 router.get('/chart/:symbol', chartTest); 
 

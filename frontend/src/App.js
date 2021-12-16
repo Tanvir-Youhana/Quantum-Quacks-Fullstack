@@ -13,8 +13,7 @@ import instance from "./axios";
 import AuthContext from "./helpers/AuthContext.js";
 import Registration from "./components/Registration.js";
 import PageNotFound from "./components/PageNotFound.js";
-//import SearchStock from "./components/SearchStock";
-import SearchStock2 from "./components/SearchStock2.js";
+import SearchStock from "./components/SearchStock";
 import Search from "@mui/icons-material/Search";
 function App() {
   const [authState, setAuthState] = useState({
@@ -86,7 +85,7 @@ function App() {
               <Route path = "/earningCalendar" exact component={EarningCalendar} /> 
               <Route path= "/ipoCalendar" exact component={IPOcalendar} />
               <Route path= "/trendingStock" exact component={TrendingStock} />
-              <Route path= "/stock/:ticker" exact component={SearchStock2} /> 
+              <Route path= "/chart/:ticker" exact component={SearchStock} /> 
               <Route path= "*" exact component={PageNotFound} /> 
             </Switch>
           </Router>
