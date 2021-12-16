@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import HighStock from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
 import instance from "../axios";
+import Navbar from "./Navbar";
 import { useParams } from "react-router-dom";
 
 function SearchStock2() {
@@ -13,7 +14,7 @@ function SearchStock2() {
     useEffect(() => {
         async function getData() {
             await instance
-                .get("/chartTest")
+                .get(`/chart/${ticker}`)
                 .then((response) => {
                     console.log(response.data);
                     setData(response.data);
@@ -114,11 +115,17 @@ function SearchStock2() {
       };
     return (
         <div>
-            <HighchartsReact 
-                highcharts={HighStock}
-                constructorType={"stockChart"}
-                options={mockOptions}
-                />
+            <div>
+                <Navbar /> 
+            </div> 
+            <div>
+                <HighchartsReact 
+                    highcharts={HighStock}
+                    constructorType={"stockChart"}
+                    options={mockOptions}
+                    />
+            </div>
+
         </div>
     )
 }

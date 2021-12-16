@@ -273,7 +273,7 @@ export const getHistorical = async(req, res) => {
 
 export const chartTest = async(req, res) => {
     yahooFinance.historical({
-        symbol: "AAPL", // req.params.symbol 
+        symbol: req.params.symbol, // req.params.symbol 
         from: '2021-01-01',
         to: '2021-12-16',
     }, function(err, quotes) {
@@ -299,7 +299,7 @@ export const chartTest = async(req, res) => {
             //console.log("Date: " +  timestamp);
             //console.log("Close: " + close); 
             //console.log(result); 
-
+            //console.log("Symbol: " + req.params.symbol); 
             const sorted = result.sort(function(a,b) { 
                 return a[0] - b[0];
             })
