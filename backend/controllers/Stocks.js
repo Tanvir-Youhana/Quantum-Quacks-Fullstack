@@ -308,8 +308,6 @@ export const chartTest = async(req, res) => {
     })
 }
 
-
-
 // Currently use this to get current price
 export const yahooRealTime = async(req, res) => {
 
@@ -327,33 +325,16 @@ export const yahooRealTime = async(req, res) => {
     })
 }
 
-// Currently not using this. Constantly output price but not sure how to use it. 
-/*
-export const addTickers = async(req, res) => {
-    const tickerName = req.params.ticker;
-    StockSocket.addTicker(stock);
-}
-
-export const getRealTime = async(req, res) => {
-
-        
-        StockSocket.addTicker("AAPL", stockPriceChanged);
-
-        function stockPriceChanged(data)
+export const tickerValidity = async(req, res) => {
+    try {
+        if(!cts.valid(req.params.ticker))
         {
-            //console.log(data);
-            res.json(data); 
+            return res.status(404).json({error: "Error! Ticker name is invalid."});
+        } else {
+            return res.status(200).json({message: "Ticker name is valid"}); 
         }
-                //StockSocket.removeTicker("AAPL"); 
-                
-               
-        StockSocket.addTicker("AAPL", function(err, stockPriceChanged) {
-            if(err)
-            {
-                return res.status(404).json("error");
-            } else {
-                return res.status(201).json(stockPriceChanged);
-            }
-        })
-}   
-*/
+    } catch(e) 
+    {
+        res.status(500).send(e.message); 
+    }
+}
