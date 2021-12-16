@@ -2,40 +2,63 @@ import React from "react";
 import Navbar from "./Navbar";
 import { Paper } from "@mui/material";
 import "./MarketHoliday.css";
+import instance from "../axios"; 
+import {useState, useMemo, useEffect} from "react"; 
+//import axios from "axios";
+import { useTable } from "react-table";
+import Table from "./Table"; 
+
 export default function MarketHoliday() {
+  // exchange name date
+  const [data, setData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true); 
+
+  const columns = useMemo(
+    () => [
+    {
+      Header: "Exchange",
+      accessor: "exchange",
+    },
+    {
+      Header: "Name",
+      accessor: "name",
+    },
+    {
+      Header: "Date",
+      accessor: "date",
+    },
+  ], []); 
+
+
+
+  useEffect(() => {
+    async function getData() {
+      await instance
+        .get("/retrieveMarketHolidays")
+        .then((response) => {
+
+          console.log(response.data);
+          setData(response.data);
+          setLoadingData(false);
+        });
+    }
+    if (loadingData) {
+      getData();
+    }
+  }, []);
+
+
   return (
     <div>
       <div>
-        <Navbar />
-      </div>
-      <div className="title">MARKET HOLIDAY</div>
-      <div className="table">
-        <Paper>
-          <form>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Address</th>
-                  <th>Phone Number</th>
-                  <th>Email</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr>
-                  <td>Md</td>
-                  <td>Bronx</td>
-                  <td>911</td>
-                  <td>mdislam@islam.com</td>
-                  <td>santaslittlehelper</td>
-                </tr>
-              </tbody>
-            </table>
-          </form>
-        </Paper>
-      </div>
-    </div>
-  );
+        <Navbar /> 
+      </div> 
+      <div className="title"> MARKET HOLIDAY </div> 
+      <Paper>
+        <form> 
+        <Table columns={columns} data={data} />
+        </form>
+      </Paper>
+    </div> 
+    );
 }
