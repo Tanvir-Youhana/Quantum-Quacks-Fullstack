@@ -13,7 +13,7 @@ import instance from "./axios";
 import AuthContext from "./helpers/AuthContext.js";
 import Registration from "./components/Registration.js";
 import PageNotFound from "./components/PageNotFound.js";
-
+import Home2 from "./components/Home2";
 function App() {
   const [authState, setAuthState] = useState({
     email: "",
@@ -77,7 +77,8 @@ function App() {
               {/* <Route path="/" exact component={Home} /> */}
               {/* <Route path="/login" exact component={Login} /> */}
               <Route path="/" exact component={Login} />
-              <Route path="/Home" exact component={Home} /> 
+              <Route path="/Home" exact component={Home} />
+              <Route path="/Home2" exact component={Home2} /> 
               <Route path="/signup" exact component={Registration} />
               <Route path= "/setting" exact component={UpdatePassword} />
               <Route path= "/marketHoliday" exact component={MarketHoliday} />

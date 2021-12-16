@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import MarketHoliday from "./MarketHoliday";
-import "./Navbar.css";
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -154,10 +154,11 @@ function Navbar() {
             <img src={Logo} width={80} />
           </div>
           <Typography
-            color="white"
+            color="orange"
             variant="h4"
             noWrap
             component="div"
+
             sx={{ display: { xs: "none", sm: "block" } }}
           >
             Quantum Quacks
@@ -172,7 +173,7 @@ function Navbar() {
             />
           </Search>
           <Stack spacing={2} direction="row">
-            <Button variant="contained"  component={Link} to="./marketHoliday">
+            <Button variant="contained" component={Link} to="./marketHoliday">
               Market Holiday
             </Button>
             <Button variant="contained" component={Link} to="./EarningCalendar">
@@ -186,6 +187,9 @@ function Navbar() {
             </Button>
             <Button variant="contained" component={Link} to="./Home">
               Home
+            </Button>
+            <Button variant="contained" component={Link} to="./Home2">
+              Home2
             </Button>
           </Stack>
 
