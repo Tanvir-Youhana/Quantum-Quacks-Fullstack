@@ -89,7 +89,7 @@ export default function FormDialog() {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button size="medium" variant="contained" onClick={handleClickOpen}>
         Add
       </Button>
       <Dialog open={open} onClose={handleClose} TransitionComponent={Collapse}>
