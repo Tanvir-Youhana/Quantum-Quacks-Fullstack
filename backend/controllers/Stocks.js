@@ -59,35 +59,34 @@ export const retrieveActualList = async(req, res) => {
 // Refresh button next to each entry. Still work in progress.
 export const checkUserEntry = async(req, res) => {
     try {
-
         const user = await User.findOne({where: {email: req.user.email}});
         const userID = user.id; 
 
         // entry_row finds all row in Stock Entry table that matches userID
         // and already expires
+        console.log("userID: " + userID); 
         const entry_row = await stockEntry.findAll({
-            raw: true,
             where: {
                 userID: userID, 
-                expirationAt: {
-                    [Op.lt]:
-                    Sequelize.fn('NOW') 
-                }
             }
-        });
+        });;
+        //console.log("Checker: ", new Date()); 
         //console.log("Entry_row: ", entry_row); 
         // entry gives only the entryID that matches the userID
+        const NOW = (new Date()).toISOString(); 
+        //console.log("NOW: " + NOW); 
+
+        //const day = moment(dateToFetch, 'YYYY-MM-DD').end('day')
+        const test = await stockEntry.findAll({
+            where: {
+                userID: userID, 
+            }
+        }); 
+        console.log("Test: ", test); 
+
         const entry = await stockEntry.findAll({
-            raw: true, 
             where: {
                 userID: userID,
-                // entryID: req.params.entryID
-                /*
-                expirationAt: {
-                    [Op.lt]:
-                    Sequelize.fn('NOW')
-                }
-                */
             }
         })
         .then(entries => entries.map(entry => entry.entryID));
