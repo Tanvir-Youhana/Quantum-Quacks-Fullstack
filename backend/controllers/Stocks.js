@@ -29,13 +29,20 @@ export const checkUserEntry = async(req, res) => {
 
         const user = await User.findOne({where: {email: req.user.email}});
         const userID = user.id; 
-        // SELECT currentPrice, WHERE userID = this.userID AND expirationAT < currentDate
+
+        // entry_row finds all row in Stock Entry table that matches userID
+        // and already expires
         const entry_row = await stockEntry.findAll({
             raw: true,
             where: {
                 userID: userID, 
+                expirationAt: {
+                    [Op.lt]:
+                    Sequelize.fn('NOW') 
+                }
             }
         });
+        // entry gives only the entryID that matches the userID
         const entry = await stockEntry.findAll({
             raw: true, 
             where: {
@@ -50,21 +57,24 @@ export const checkUserEntry = async(req, res) => {
             }
         })
         .then(entries => entries.map(entry => entry.entryID));
-        console.log("entry Value: ", entry);
-        console.log("First Entry: ", entry_row[0]);
+        //console.log("entry Value: ", entry);
+        //console.log("First Entry: ", entry_row[0]);
+        console.log("Selected entryID: " + entry); 
+
+        // check finds all rows in checkEntry table that matches userID from checkEntryID 
         const check = await checkEntry.findAll({
             where: {
                 checkEntryID: entry
             }
         });
         //console.log("Check: ", check); 
-        console.log("Second Entry: ", check[1]); 
-        console.log("Second Check Entry: ", check[1].checkEntryID); 
+        //console.log("Second Entry: ", check[1]); 
+        //console.log("Second Check Entry: ", check[1].checkEntryID); 
 
         // Puts entries into actual table 
         for(let i = 0; i < entry.length; ++i)
         {
-            console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
+            //console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
 
             // Get acutalPrice
             let actualPrice; 
@@ -84,8 +94,8 @@ export const checkUserEntry = async(req, res) => {
                     }
                 }
             })
-            console.log("The actual price: " + actualPrice); 
-            console.log("The current price: " + entry_row[i].currentPrice); 
+            //console.log("The actual price: " + actualPrice); 
+            //console.log("The current price: " + entry_row[i].currentPrice); 
             // Create accuracy 
             if(entry_row[i].currentPrice < actualPrice)
             {
@@ -191,6 +201,18 @@ export const retrieveStockList = async(req, res) => {
     }
 }
 
+/*
+export const retrieveInitialActualList = async(req, res) => {
+    try {
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        const data = await 
+
+    }
+}
+*/
+
 // View current user stock list. Still work in progress
 export const userStockList = async(req, res) => {
     try {
@@ -227,7 +249,7 @@ export const addStockEntry = async(req, res) => {
         //console.log("UserID: " + userID); 
        if(!cts.valid(tickerName))
        {
-           res.json({error: "Ticker name is invalid."});
+           return res.json({error: "Ticker name is invalid."});
        }
        // Check if entry has same tickerName + timeFrame
        
@@ -245,25 +267,25 @@ export const addStockEntry = async(req, res) => {
        );
        if(duplicatEntry)
         {
-             res.json({error: "Entry already exist"});
+            return res.json({error: "Entry already exist"});
         } 
 
         // Make sure prediction has valid input
         if(prediction != "Bullish" && prediction != "Bearish")
         {
-            res.json({error: "Invalid prediction input"}); 
+            return res.json({error: "Invalid prediction input"}); 
         }
         // Make sure timeFrame has valid input
         console.log("timeFrame: " + timeFrame); 
         if(timeFrame != "EOD" && timeFrame != "EOW" && timeFrame != "EOM")
         {
-            res.json({error: "Invalid timeFrame input"});
+            return res.json({error: "Invalid timeFrame input"});
         }
         console.log("confidentLevel: " + confidentLevel);
         // Make sure confidentLevel has valid input 
         if(confidentLevel < 1 || confidentLevel > 10)
         {
-            res.json({error: "Invalid confidentLevel input"});
+            return res.json({error: "Invalid confidentLevel input"});
         }
         
 
@@ -323,13 +345,17 @@ export const addStockEntry = async(req, res) => {
         }
 
         console.log("TEST HERE");
-        // Create newCheckEntry row for newStockEntry 
-        const {actualPrice, accuracy} = req.body; 
+
+        //const {actualPrice, accuracy} = req.body; 
+        let actualPrice;
+        let accuracy = "Pending"; 
+
         const checkEntryID = newStockEntry.entryID; 
 
         console.log("actualPrice: " + actualPrice);
         console.log("accuracy: " + accuracy); 
         console.log("checkEntryID: " + checkEntryID);
+        // Create newCheckEntry row for newStockEntry 
         const newCheckEntry = await checkEntry.create({
             checkEntryID: checkEntryID,
             actualPrice: actualPrice,
