@@ -11,6 +11,7 @@ import Table from "./Table";
 import "./predictionTable.css";
 import FormDialog from "./dialog";
 import "./Home.css"; 
+import Moment from "moment";
 
 export default function Home() {
   // exchange name date
@@ -46,6 +47,26 @@ export default function Home() {
       {
           Header: "Time Frame",
           accessor: "timeFrame",
+        },
+        {
+          Header: "Confident Level",
+          accessor: "confidentLevel",
+        },
+        {
+          Header: "Description",
+          accessor: "description",
+        },
+        {
+          Header: "Price Range",
+          accessor: "priceRange",
+        },
+        {
+          Header: "Expiration Date",
+          accessor: d => {
+            return Moment(d.expirationAt)
+              .local()
+              .format("MM-DD-YYYY h:mm a")
+          },
         },
     ],
     []
