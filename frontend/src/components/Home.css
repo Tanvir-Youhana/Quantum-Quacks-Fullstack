@@ -98,5 +98,15 @@
   }
 .deletePosition
 {
-  margin-left: 200px;
+  position:absolute !important;
+  display: flex;
+  /* display: inline; */
+  margin-left: 380px;
+  margin-right: 395px;
+ 
+  background-color: white;
+}
+.textfield__label
+{
+  color:white !important;
 }
