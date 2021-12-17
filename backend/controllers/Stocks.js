@@ -96,13 +96,13 @@ export const retrieveStockList = async(req, res) => {
     try {
         const user = await User.findOne({where: {email: req.user.email}});
         const userID = user.id; 
-        
+
         const data = await stockEntry.findAll({
             where: {
                 userID: userID,
             }
         });
-        console.log("StockList data: " + data); 
+        //console.log("StockList data: " + data); 
         return res.status(201).send(data); 
     } catch (e) {
         res.status(500).send(e.message); 
@@ -137,6 +137,7 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
+        console.log("HELP ME");
         const {tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
         
         const user = await User.findOne({where: {email: req.user.email}});
@@ -145,7 +146,7 @@ export const addStockEntry = async(req, res) => {
         //console.log("UserID: " + userID); 
        if(!cts.valid(tickerName))
        {
-           return res.status(404).json({message: "Ticker name is invalid."});
+           res.json({error: "Ticker name is invalid."});
        }
        // Check if entry has same tickerName + timeFrame
        
@@ -163,24 +164,26 @@ export const addStockEntry = async(req, res) => {
        );
        if(duplicatEntry)
         {
-            return res.status(404).json({message: "Entry already exist"});
+             res.json({error: "Entry already exist"});
         } 
 
         // Make sure prediction has valid input
         if(prediction != "Bullish" && prediction != "Bearish")
         {
-            return res.status(404).json({message: "Invalid prediction input"}); 
+            res.json({error: "Invalid prediction input"}); 
         }
         // Make sure timeFrame has valid input
         console.log("timeFrame: " + timeFrame); 
         if(timeFrame != "EOD" && timeFrame != "EOW" && timeFrame != "EOM")
         {
-            return res.status(404).json({message: "Invalid timeFrame input"});
+            res.json({error: "Invalid timeFrame input"});
         }
+        console.log("confidentLevel: " + confidentLevel);
         // Make sure confidentLevel has valid input 
         if(confidentLevel < 1 || confidentLevel > 10)
         {
-            return res.status(404).json({message: "Invalid confidentLevel input"});
+            console.log("HELLO????")
+            res.json({error: "Invalid confidentLevel input"});
         }
         
 
@@ -213,8 +216,7 @@ export const addStockEntry = async(req, res) => {
             currentPrice: currentPrice, // get currentPrice from API 
             expirationAt: expirationAt //  Calculate expiration using Sequelize 
         });
-        res.json("Stock Entry added!")
-        
+        console.log("Stock entry added!");   
         // Create expirationAt
         if(timeFrame == "EOD") {
             //newStockEntry.expirationAt = newStockEntry.createdAt;
@@ -252,6 +254,7 @@ export const addStockEntry = async(req, res) => {
         });
 
         console.log("Check Entry also added!"); 
+        return res.json({message: "Successfully added entry!"})
 
     } catch (e) 
     {

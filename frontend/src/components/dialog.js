@@ -45,8 +45,10 @@ export default function FormDialog() {
       "description: " + description, 
       "priceRange: " + priceRange
     )
+    //let capitalized_ticker = tickerName.toUpperCase; 
 
     // Storing user entry in database
+    console.log("TEST TEST");
     instance
       .post("/entry/ticker", {
         tickerName: tickerName,
@@ -62,14 +64,15 @@ export default function FormDialog() {
         },
       })
        .then((response) => {
-         if (response.data.message) {
-           setAddStatus(response.data.message);
-         } else {
-           console.log(response); 
+         if(response.data.error)
+         {
+            alert(response.data.error);
          }
+
         });
     
     setOpen(false);
+    window.location.reload();
   };
   
   // useEffect(() => {
