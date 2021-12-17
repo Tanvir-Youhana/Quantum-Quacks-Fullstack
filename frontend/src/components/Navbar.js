@@ -20,6 +20,9 @@ import "./Navbar.css";
 import { useHistory } from "react-router-dom";
 import instance from "../axios";
 import { useParams } from "react-router-dom";
+import cts from "check-ticker-symbol";
+import Swal from "sweetalert2";
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -152,6 +155,12 @@ function Navbar() {
   );
   let history = useHistory();
   const getTicker = () => {
+
+    if(!cts.valid(input))
+    {
+      Swal.fire({icon: "error", title: "Invalid ticker! Please try again."});
+      return; 
+    }
     const ticker = input.toUpperCase();
     history.push("/chart/" + ticker + "");
   };
