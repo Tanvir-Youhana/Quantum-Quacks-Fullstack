@@ -17,6 +17,7 @@ import instance from "../axios";
 import Logo from "./qq.png";
 import { useHistory } from "react-router-dom";
 import NavbarLR from "./NavbarLR";
+// import "./Login.css";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

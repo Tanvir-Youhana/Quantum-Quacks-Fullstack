@@ -23,7 +23,6 @@ import { useParams } from "react-router-dom";
 import cts from "check-ticker-symbol";
 import Swal from "sweetalert2";
 
-
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -155,11 +154,9 @@ function Navbar() {
   );
   let history = useHistory();
   const getTicker = () => {
-
-    if(!cts.valid(input))
-    {
-      Swal.fire({icon: "error", title: "Invalid ticker! Please try again."});
-      return; 
+    if (!cts.valid(input)) {
+      Swal.fire({ icon: "error", title: "Invalid ticker! Please try again." });
+      return;
     }
     const ticker = input.toUpperCase();
     history.push("/chart/" + ticker + "");
@@ -168,13 +165,14 @@ function Navbar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar className="header">
           <div>
             <img src={Logo} width={80} />
           </div>
           <Typography
-            color="white"
+            color="#e3f2fd"
             variant="h4"
+            fontFamily="Roboto"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
@@ -203,7 +201,7 @@ function Navbar() {
             >
               Search
             </Button>
-            <Button variant="contained" component={Link} to="/marketHoliday">
+            {/* <Button variant="contained" component={Link} to="/marketHoliday">
               Market Holiday
             </Button>
             <Button variant="contained" component={Link} to="/EarningCalendar">
@@ -216,6 +214,45 @@ function Navbar() {
               Trending Stock
             </Button>
             <Button variant="contained" component={Link} to="/Home">
+              size="large"
+              color="success"
+              variant="contained"
+              component={Link}
+              to="./marketHoliday"
+            >
+              Market Holiday
+            </Button> */}
+            <Button
+              size="large"
+              color="success"
+              variant="contained"
+              component={Link}
+              to="./EarningCalendar"
+            >
+              Earning Calendar
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="./IPOcalendar"
+            >
+              IPO Calendar
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="./TrendingStock"
+            >
+              Trending Stock
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="./Home"
+            >
               Home
             </Button>
           </Stack>
