@@ -1,45 +1,93 @@
-.home {
-  justify-content: center;
-}
-.home_wrapper {
-  display: flex;
-  justify-content: space-between;
-  color: white;
-  margin-right: 0px;
-  margin-top: 10px;
-}
-.home__searchContainer {
-  margin-left: 20px;
-}
-.home__searchContainer > input {
-  color: rgb(129, 129, 128);
-  width: 375px;
-  color: white;
-  background-color: black;
-}
-.home__searchContainer > input:focus {
-  outline: none;
-}
-.home__account {
-  display: flex;
-  margin-right: 10px;
-  color: orange;
-}
-.home_content {
-  background-color: black;
-  height: 700px;
-  display: flex;
-  padding: 20px;
-  border-radius: 35px;
-  margin-top: 20px;
-}
-.home_graph {
-  background: rgb(78, 63, 63);
-  flex: 0.6;
-  border-radius: 30px;
-}
-.home_StockList {
-  background: rgb(111, 111, 224);
-  flex: 0.4;
-  border-radius: 30px;
-}
+.bigContainer {
+    height: 700px;
+    display: flex;
+    padding: 20px;
+    border-radius: 35px;
+    margin-top: 20px;
+    flex-direction: row;
+  }
+  
+  .leftContainer {
+    margin-right: 20px;
+    flex: 0.6;
+    border-radius: 30px;
+  }
+  
+  .rightContainer {
+    margin-left: 30px;
+    flex: 0.4;
+    border-radius: 30px;
+  }
+  .label {
+    margin-bottom: 5px;
+    color: orange;
+    margin-left: 450px;
+  }
+  
+  .label2 {
+    margin-bottom: 5px;
+    color: orange;
+    margin-left: 300px;
+  }
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 1rem;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 90%;
+    margin:auto;
+    background-color: black !important;
+  }
+  
+  th,
+  td {
+    border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+    /* font-size: 10rem; */
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  th {
+    color: white;
+    background-color: rgb(117, 201, 250);
+  }
+  
+  td {
+    color: white;
+    background-color: rgb(205, 235, 253);
+  }
+  
+  form {
+    display: flex;
+    gap: 1px;
+    background-color: #001a34 !important;
+  }
+  
+  /* form td:last-child {
+    display: flex;
+    justify-content: space-evenly;
+  } */
+  
+  form * {
+    background-color: #04293A
+    ;
+    font-size: 1.5rem;
+    
+  }
+  
+  .title {
+    color: lightblue;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  

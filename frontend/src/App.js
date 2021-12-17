@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import Login from "./components/Login";
-import Home from "./components/Home";
 import "./components/App.css";
 import Logo from "./qq.png";
 import UpdatePassword from "./components/UpdatePassword";
@@ -15,7 +14,7 @@ import Registration from "./components/Registration.js";
 import PageNotFound from "./components/PageNotFound.js";
 import SearchStock from "./components/SearchStock";
 import Search from "@mui/icons-material/Search";
-import Home2 from "./components/Home2";
+import Home from "./components/Home";
 function App() {
   const [authState, setAuthState] = useState({
     email: "",
@@ -79,8 +78,7 @@ function App() {
               {/* <Route path="/" exact component={Home} /> */}
               {/* <Route path="/login" exact component={Login} /> */}
               <Route path="/" exact component={Login} />
-              <Route path="/Home" exact component={Home} />
-              <Route path="/Home2" exact component={Home2} /> 
+              <Route path="/Home" exact component={Home} /> 
               <Route path="/signup" exact component={Registration} />
               <Route path= "/setting" exact component={UpdatePassword} />
               <Route path= "/marketHoliday" exact component={MarketHoliday} />

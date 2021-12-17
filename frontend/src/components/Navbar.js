@@ -215,15 +215,7 @@ function Navbar() {
             <Button variant="contained" component={Link} to="/TrendingStock">
               Trending Stock
             </Button>
-            <Button variant="contained" component={Link} to="/Home">
-              size="large"
-              color="success"
-              variant="contained"
-              component={Link}
-              to="./marketHoliday"
-            >
-              Market Holiday
-            </Button> */}
+            */}
             <Button
               variant="contained"
               color="success"
@@ -232,6 +224,15 @@ function Navbar() {
             >
               Home
             </Button>
+            <Button 
+              color="success"
+              variant="contained"
+              component={Link}
+              to="/marketHoliday"
+            >
+              Market Holiday
+            </Button> 
+            
             <Button
               variant="contained"
               color="success"
@@ -257,9 +258,6 @@ function Navbar() {
             >
               IPO Calendar
               Home
-            </Button>
-            <Button variant="contained" component={Link} to="/Home2">
-              Home2
             </Button>
           </Stack>
 
