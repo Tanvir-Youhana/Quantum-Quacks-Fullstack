@@ -103,7 +103,6 @@ export default function Home() {
           },
         })
         .then((response) => {
-          console.log("TEST: " + response.data);
           setData(response.data);
           setLoadingData(false);
         });
@@ -119,7 +118,6 @@ export default function Home() {
           },
         })
         .then((response) => {
-          console.log("TEST2: " + response.data);
           if(response.data.error)
           {
             alert(response.data.error); 
@@ -140,6 +138,7 @@ export default function Home() {
   }, []);
 
   const handleRefresh = () => {
+    console.log("Check5");
     instance.get("/checkUserEntry",
     {
       headers: {
@@ -147,7 +146,6 @@ export default function Home() {
       },
     })
     .then((response) => {
-      console.log("TEST3: " + response.data); 
       setData2(response.data); 
       setLoadingData2(false); 
 
