@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import { Paper } from "@mui/material";
+import Button from "@mui/material/Button";
 import "./MarketHoliday.css";
 import instance from "../axios";
 import { useState, useMemo, useEffect } from "react";
@@ -21,6 +22,8 @@ export default function Home2() {
   const [data2, setData2] = useState([]);
   const [loadingData2, setLoadingData2] = useState(true); 
 
+  const [data3, setData3] = useState([]);
+  const [loadingData3, setLoadingData3] = useState(true); 
   const columns = useMemo(
     () => [
       {
@@ -60,6 +63,7 @@ export default function Home2() {
   useEffect(() => {
     // Prediction Table
     async function getData() {
+      new Promise(r => setTimeout(r, 2000));
       instance
         .get("/retrieveStockList",
         {
@@ -77,7 +81,7 @@ export default function Home2() {
     // Actual Table
     async function getData2() {
       instance 
-        .get("/checkUserEntry",
+        .get("/retrieveActualList",
         {
           headers: {
             accessToken: localStorage.getItem("accessToken"),
@@ -85,8 +89,15 @@ export default function Home2() {
         })
         .then((response) => {
           console.log("TEST2: " + response.data);
-          setData2(response.data);
-          setLoadingData2(false);
+          if(response.data.error)
+          {
+            alert(response.data.error); 
+          } else { 
+            setData2(response.data);
+            setLoadingData2(false);
+          }
+
+
         })
     }
     if (loadingData) {
@@ -96,6 +107,22 @@ export default function Home2() {
       getData2(); 
     }
   }, []);
+
+  const handleRefresh = () => {
+    instance.get("/checkUserEntry",
+    {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    })
+    .then((response) => {
+      console.log("TEST3: " + response.data); 
+      setData2(response.data); 
+      setLoadingData2(false); 
+
+      //window.location.reload();
+    })
+  }
 
   return (
     <div>
@@ -111,6 +138,7 @@ export default function Home2() {
               </form>
             </Paper>
             <FormDialog/>
+            <Button onClick={handleRefresh}>Refresh</Button>
           </div>
           <div className="rightContainer">
             <div className="title"> Actual List </div>

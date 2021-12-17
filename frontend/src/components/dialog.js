@@ -45,7 +45,7 @@ export default function FormDialog() {
       "description: " + description, 
       "priceRange: " + priceRange
     )
-    //let capitalized_ticker = tickerName.toUpperCase; 
+    let capitalized_ticker = tickerName.toUpperCase; 
 
     // Storing user entry in database
     console.log("TEST TEST");

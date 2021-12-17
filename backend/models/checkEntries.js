@@ -15,7 +15,7 @@ const entryCheck = db.define('check_entry',{
         allowNull: false,
     },
     actualPrice: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DOUBLE,
         allowNull: true,
     },
     accuracy: {

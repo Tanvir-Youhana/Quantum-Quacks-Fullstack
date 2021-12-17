@@ -6,16 +6,28 @@ import { Sequelize } from 'sequelize';
 import User from '../models/userModel.js';
 import trendingTickers from '../models/trendingTickers.js';
 
-export const retrieveUserEntry = async(req, res) => {
+export const retrieveActualList = async(req, res) => {
     try {
-        const user = await checkEntry.findOne({where: {email: req.user.email}});
+        const user = await User.findOne({where: {email: req.user.email}});
         const userID = user.id; 
 
-        const data = await stockEntry.findAll({
+        // entry gives only the entryID that matches the userID
+        const entry = await stockEntry.findAll({
+            raw: true, 
             where: {
                 userID: userID,
             }
+        })
+        .then(entries => entries.map(entry => entry.entryID));
+        console.log("Selected entryID: " + entry); 
+
+        // data finds all rows in checkEntry table that matches userID from checkEntryID 
+        const data = await checkEntry.findAll({
+            where: {
+                checkEntryID: entry
+            }
         });
+        console.log("retrieveActualList called"); 
         //console.log("StockList data: " + data); 
         return res.status(201).send(data); 
     } catch (e) {
@@ -42,6 +54,7 @@ export const checkUserEntry = async(req, res) => {
                 }
             }
         });
+        //console.log("Entry_row: ", entry_row); 
         // entry gives only the entryID that matches the userID
         const entry = await stockEntry.findAll({
             raw: true, 
@@ -74,7 +87,7 @@ export const checkUserEntry = async(req, res) => {
         // Puts entries into actual table 
         for(let i = 0; i < entry.length; ++i)
         {
-            //console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
+            console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
 
             // Get acutalPrice
             let actualPrice; 
@@ -94,7 +107,7 @@ export const checkUserEntry = async(req, res) => {
                     }
                 }
             })
-            //console.log("The actual price: " + actualPrice); 
+            console.log("The actual price: " + actualPrice); 
             //console.log("The current price: " + entry_row[i].currentPrice); 
             // Create accuracy 
             if(entry_row[i].currentPrice < actualPrice)
@@ -102,14 +115,16 @@ export const checkUserEntry = async(req, res) => {
                 console.log("CHECKING");
                 if(entry_row[i].prediction == "Bearish")
                 {
-                    await check.update({accuracy: "False"}), {
+                    console.log("TEST97");
+                    await check[i].update({accuracy: "False"}), {
                         where: {
                             checkEntryID: entry_row[i].entryID
                         }
                     }
+                    console.log("HELLO?");
                     //check[i].accuracy = "False";
                 } else {
-                    await check.update({accuracy: "True"}), {
+                    await check[i].update({accuracy: "True"}), {
                         where: {
                             checkEntryID: entry_row[i].entryID
                         }
@@ -121,13 +136,15 @@ export const checkUserEntry = async(req, res) => {
             {
                 if(entry_row[i].prediction == "Bearish")
                 {
-                    await check.update({accuracy: "True"}), {
+                    console.log("TEST98");
+                    await check[i].update({accuracy: "True"}), {
                         where: {
                             checkEntryID: entry_row[i].entryID
                         }
                     }
                 } else {
-                    await check.update({accuracy: "False"}), {
+                    console.log("TEST99");
+                    await check[i].update({accuracy: "False"}), {
                         where: {
                             checkEntryID: entry_row[i].entryID
                         }
@@ -142,11 +159,12 @@ export const checkUserEntry = async(req, res) => {
                         checkEntryID: entry_row[i].entryID
                     }
                 }
-                //check[i].accuracy = "Sideways"; 
                 console.log("Current Price and Actual Price are equal!");
+                //check[i].accuracy = "Sideways"; 
+
             }
 
-
+            console.log("End of for loop iteration");
         }
         const data = await checkEntry.findAll({
             where: {
@@ -201,17 +219,6 @@ export const retrieveStockList = async(req, res) => {
     }
 }
 
-/*
-export const retrieveInitialActualList = async(req, res) => {
-    try {
-        const user = await User.findOne({where: {email: req.user.email}});
-        const userID = user.id; 
-
-        const data = await 
-
-    }
-}
-*/
 
 // View current user stock list. Still work in progress
 export const userStockList = async(req, res) => {
@@ -265,6 +272,7 @@ export const addStockEntry = async(req, res) => {
                console.log("Error: ", err); 
            }
        );
+       console.log("WHAT IS MY DUPLICATE ENTRY: ",  duplicatEntry); 
        if(duplicatEntry)
         {
             return res.json({error: "Entry already exist"});
@@ -306,7 +314,7 @@ export const addStockEntry = async(req, res) => {
         console.log("currentPrice: " + currentPrice);
 
         let expirationAt = null; 
-
+        
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name

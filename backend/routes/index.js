@@ -8,7 +8,7 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-import {retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
+import {retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical, retrieveActualList} from "../controllers/Stocks.js";
 import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
 import validateToken from "../middlewares/AuthMiddleware.js";
 
@@ -20,6 +20,7 @@ router.get('/retrieveMarketHolidays', retrieveMarketHolidays);
 router.get('/retrieveipoCalendar', retrieveipoCalendar);
 router.get('/retrieveEarningCalendar', retrieveEarningCalendar); 
 router.get('/retrieveStockList', validateToken, retrieveStockList);
+router.get('/retrieveActualList', validateToken, retrieveActualList); 
 // Static Routes
 router.get('/ListingStatus', getListingStatus);
 router.get('/earningCalendar', getEarningCalendar); 
