@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { Paper } from "@mui/material";
+import { Paper, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import "./MarketHoliday.css";
 import instance from "../axios";
@@ -12,8 +12,6 @@ import "./predictionTable.css";
 import FormDialog from "./dialog";
 import "./Home2.css";
 
-
-
 export default function Home2() {
   // exchange name date
   const [data, setData] = useState([]);
@@ -24,14 +22,21 @@ export default function Home2() {
 
   const [data3, setData3] = useState([]);
   const [loadingData3, setLoadingData3] = useState(true); 
+
+  const [idDelete, setIdDelete] = useState(""); 
+
   const columns = useMemo(
     () => [
+      {
+        Header: "ID",
+        accessor: "entryID",
+      }, 
       {
         Header: "Ticker",
         accessor: "tickerName",
       },
       {
-        Header: "Current Price",
+        Header: "Current Price",  
         accessor: "currentPrice",
       },
       {
@@ -124,6 +129,24 @@ export default function Home2() {
     })
   }
 
+  const handleDelete = () => {
+    instance.delete("/deleteEntryRow", {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+
+      data: {
+        entryID: idDelete
+      },
+    })
+    .then((response) => {
+
+      console.log("Response: ", response.data); 
+      
+    })
+    window.location.reload();
+  }
+
   return (
     <div>
       <div>
@@ -138,7 +161,24 @@ export default function Home2() {
               </form>
             </Paper>
             <FormDialog/>
-            <Button onClick={handleRefresh}>Refresh</Button>
+            <div>
+              <Button onClick={handleRefresh}>Refresh Actual List</Button>
+            </div>
+            <div>
+              <Button onClick={handleDelete}>Delete</Button>
+                <TextField
+              autoFocus
+              label="ID: "
+              placeholder="Enter Ticker name  ex: APPL"
+              halfWidth
+              variant="outlined"
+              color="secondary"
+              type= "number"
+              onChange={(e) => {
+                setIdDelete(e.target.value);
+              }}
+              />
+            </div>
           </div>
           <div className="rightContainer">
             <div className="title"> Actual List </div>
