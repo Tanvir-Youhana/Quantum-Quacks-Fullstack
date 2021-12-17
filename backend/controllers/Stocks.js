@@ -6,6 +6,23 @@ import { Sequelize } from 'sequelize';
 import User from '../models/userModel.js';
 import trendingTickers from '../models/trendingTickers.js';
 
+export const retrieveUserEntry = async(req, res) => {
+    try {
+        const user = await checkEntry.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        const data = await stockEntry.findAll({
+            where: {
+                userID: userID,
+            }
+        });
+        //console.log("StockList data: " + data); 
+        return res.status(201).send(data); 
+    } catch (e) {
+        res.status(500).send(e.message); 
+    }
+}
+
 // Refresh button next to each entry. Still work in progress.
 export const checkUserEntry = async(req, res) => {
     try {
@@ -41,11 +58,13 @@ export const checkUserEntry = async(req, res) => {
             }
         });
         //console.log("Check: ", check); 
-        console.log("Second Entry: " + check[1]); 
+        console.log("Second Entry: ", check[1]); 
         console.log("Second Check Entry: ", check[1].checkEntryID); 
+
+        // Puts entries into actual table 
         for(let i = 0; i < entry.length; ++i)
         {
-            console.log("For Loop: " + i + " " + entry_symbol)
+            console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
 
             // Get acutalPrice
             let actualPrice; 
@@ -55,15 +74,22 @@ export const checkUserEntry = async(req, res) => {
             }, function(err, quotes) {
                 if (err)
                 {
-                    return res.status(404).json("error");
+                    return res.json("error");
                 } else {
                     actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
+                    check[i].update({actualPrice: actualPrice}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
                 }
-            });
-            console.log("The actual price: " + acutalPrice); 
+            })
+            console.log("The actual price: " + actualPrice); 
+            console.log("The current price: " + entry_row[i].currentPrice); 
             // Create accuracy 
             if(entry_row[i].currentPrice < actualPrice)
             {
+                console.log("CHECKING");
                 if(entry_row[i].prediction == "Bearish")
                 {
                     await check.update({accuracy: "False"}), {
@@ -100,7 +126,8 @@ export const checkUserEntry = async(req, res) => {
             }
             if(entry_row[i].currentPrice == actualPrice)
             {
-                await check.update({accuracy: "Sideways"}), {
+                console.log("TEST100");
+                await check[i].update({accuracy: "Sideways"}), {
                     where: {
                         checkEntryID: entry_row[i].entryID
                     }
@@ -108,8 +135,17 @@ export const checkUserEntry = async(req, res) => {
                 //check[i].accuracy = "Sideways"; 
                 console.log("Current Price and Actual Price are equal!");
             }
+
+
         }
+        const data = await checkEntry.findAll({
+            where: {
+                checkEntryID: entry,
+            }
+        });
         console.log("End of Program");
+        console.log("DATA: ", data)
+        return res.status(201).send(data); 
 
     } catch(e)
     {
