@@ -1,12 +1,4 @@
 import express from "express";
- 
-import { 
-    getAllProducts,
-    createProduct,
-    getProductById,
-    updateProduct,
-    deleteProduct
-} from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
 import {chartTest, tickerValidity, deleteEntryRow, retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical, retrieveActualList} from "../controllers/Stocks.js";
 import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
@@ -48,12 +40,5 @@ router.post('/login', login);
 router.get('/login', getLogin); 
 router.post('/register', register); 
 router.put('/setting', validateToken, updatePassword);
-//router.get('/test', test);
-//router.get('/realtime', getRealTime); 
-//router.get('/', getAllProducts);
-//router.get('/:id', getProductById);
-//router.post('/', createProduct);
-//router.patch('/:id', updateProduct);
-//router.delete('/:id', deleteProduct);
  
 export default router;
