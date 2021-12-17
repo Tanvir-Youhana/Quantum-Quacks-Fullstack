@@ -6,6 +6,27 @@ import { Sequelize } from 'sequelize';
 import User from '../models/userModel.js';
 import trendingTickers from '../models/trendingTickers.js';
 
+export const deleteEntryRow = async(req, res) => {
+    try {
+        const { entryID } = req.body; 
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        const user_entry = await stockEntry.findOne({
+            where: {
+                entryID: entryID,
+                userID: userID 
+            }
+        })
+        await user_entry.destroy(); 
+
+        res.json({message: "Successfully deleted row"}); 
+    } catch(e)
+    {
+        res.status(500).send(e.message); 
+    }
+}
+
 export const retrieveActualList = async(req, res) => {
     try {
         const user = await User.findOne({where: {email: req.user.email}});
@@ -80,10 +101,6 @@ export const checkUserEntry = async(req, res) => {
                 checkEntryID: entry
             }
         });
-        //console.log("Check: ", check); 
-        //console.log("Second Entry: ", check[1]); 
-        //console.log("Second Check Entry: ", check[1].checkEntryID); 
-
         // Puts entries into actual table 
         for(let i = 0; i < entry.length; ++i)
         {
@@ -267,13 +284,10 @@ export const addStockEntry = async(req, res) => {
                tickerName: tickerName,
                timeFrame: timeFrame
 
-            }}).catch(
-           (err) => {
-               console.log("Error: ", err); 
-           }
-       );
-       console.log("WHAT IS MY DUPLICATE ENTRY: ",  duplicatEntry); 
-       if(duplicatEntry)
+            }})
+
+       console.log("duplicateEntry: ", duplicatEntry); 
+       if(duplicatEntry != null)
         {
             return res.json({error: "Entry already exist"});
         } 
@@ -291,9 +305,9 @@ export const addStockEntry = async(req, res) => {
         }
         console.log("confidentLevel: " + confidentLevel);
         // Make sure confidentLevel has valid input 
-        if(confidentLevel < 1 || confidentLevel > 10)
+        if( confidentLevel < 1 && confidentLevel > 10)
         {
-            return res.json({error: "Invalid confidentLevel input"});
+            return res.json({error: "Invalid confident input. Please enter a number from 1 to 10"});
         }
         
 
