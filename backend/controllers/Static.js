@@ -19,7 +19,6 @@ export const getListingStatus = async(req, res) => {
         axios.get("https://www.alphavantage.co/query?function=LISTING_STATUS&date=2014-07-10&state=delisted&apikey=demo")
         .then(response => {
             listingStatus.bulkCreate(response.data);
-            console.log("TEST4: " + response.data); 
             return res.json(response.data); 
         })
     } catch(e)

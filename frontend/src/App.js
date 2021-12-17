@@ -13,12 +13,9 @@ import instance from "./axios";
 import AuthContext from "./helpers/AuthContext.js";
 import Registration from "./components/Registration.js";
 import PageNotFound from "./components/PageNotFound.js";
-<<<<<<< HEAD
 import SearchStock from "./components/SearchStock";
 import Search from "@mui/icons-material/Search";
-=======
 import Home2 from "./components/Home2";
->>>>>>> homedesign
 function App() {
   const [authState, setAuthState] = useState({
     email: "",

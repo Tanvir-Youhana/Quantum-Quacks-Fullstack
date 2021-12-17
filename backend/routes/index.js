@@ -8,11 +8,7 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-<<<<<<< HEAD
-import {tickerValidity, chartTest, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
-=======
 import {deleteEntryRow, retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical, retrieveActualList} from "../controllers/Stocks.js";
->>>>>>> homedesign
 import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
 import validateToken from "../middlewares/AuthMiddleware.js";
 
@@ -20,6 +16,7 @@ const router = express.Router();
 
 // Delete
 router.delete('/deleteEntryRow', validateToken, deleteEntryRow); 
+
 // Retrieve Database
 router.get('/retrieveTrendingTickers', retrieveTrendingTickers);
 router.get('/retrieveMarketHolidays', retrieveMarketHolidays);
@@ -39,17 +36,9 @@ router.get('/trendingTickers', getTrendingTickers);
 router.get('/checkUserEntry', validateToken, checkUserEntry);
 router.get('/oldStockEntries', oldStockEntries);
 router.get('/yahooRealTime', yahooRealTime); 
-<<<<<<< HEAD
-router.get('/:id/stocklist', userStockList); 
-router.post('/entry/ticker', addStockEntry);
-router.get('/stock/:symbol', getHistorical);
-router.get('/chart/:symbol', chartTest); 
-router.get('/ticker/:ticker', tickerValidity)
-=======
 router.get('/stocklist', userStockList); 
 router.post('/entry/ticker', validateToken, addStockEntry);
 router.get('/stock/:symbol', getHistorical); 
->>>>>>> homedesign
 
 // User Routes
 router.get('/auth', validateToken, auth);

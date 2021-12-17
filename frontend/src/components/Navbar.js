@@ -16,16 +16,13 @@ import { Link } from "react-router-dom";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import MarketHoliday from "./MarketHoliday";
-<<<<<<< HEAD
 import "./Navbar.css";
 import { useHistory } from "react-router-dom";
 import instance from "../axios";
 import { useParams } from "react-router-dom";
 import cts from "check-ticker-symbol";
 import Swal from "sweetalert2";
-=======
 
->>>>>>> homedesign
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -174,11 +171,7 @@ function Navbar() {
             <img src={Logo} width={80} />
           </div>
           <Typography
-<<<<<<< HEAD
             color="#e3f2fd"
-=======
-            color="orange"
->>>>>>> homedesign
             variant="h4"
             fontFamily="Roboto"
             noWrap
@@ -202,7 +195,6 @@ function Navbar() {
             />
           </Search>
           <Stack spacing={2} direction="row">
-<<<<<<< HEAD
             <Button
               disabled={!input}
               type="submit"
@@ -212,9 +204,6 @@ function Navbar() {
               Search
             </Button>
             {/* <Button variant="contained" component={Link} to="/marketHoliday">
-=======
-            <Button variant="contained" component={Link} to="/marketHoliday">
->>>>>>> homedesign
               Market Holiday
             </Button>
             <Button variant="contained" component={Link} to="/EarningCalendar">
@@ -227,7 +216,6 @@ function Navbar() {
               Trending Stock
             </Button>
             <Button variant="contained" component={Link} to="/Home">
-<<<<<<< HEAD
               size="large"
               color="success"
               variant="contained"
@@ -268,12 +256,10 @@ function Navbar() {
               to="/IPOcalendar"
             >
               IPO Calendar
-=======
               Home
             </Button>
             <Button variant="contained" component={Link} to="/Home2">
               Home2
->>>>>>> homedesign
             </Button>
           </Stack>
 
