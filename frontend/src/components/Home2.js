@@ -18,6 +18,9 @@ export default function Home2() {
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
 
+  const [data2, setData2] = useState([]);
+  const [loadingData2, setLoadingData2] = useState(true); 
+
   const columns1 = useMemo(
     () => [
       {
@@ -43,12 +46,12 @@ export default function Home2() {
     () => [
       {
         Header: "Actual Price",
-        accessor: "symbol",
+        accessor: "actualPrice",
       },
 
       {
-        Header: "Status",
-        accessor: "name",
+        Header: "Accuracy",
+        accessor: "accuracy",
       },
     ],
     []
@@ -89,17 +92,15 @@ export default function Home2() {
             </Paper>
             <FormDialog/>
           </div>
-        </div>
-      {/* <div className="rightContainer">
-      <div className="title"> Actual List </div>
-      <Paper>
-        <form>
-          { <Table columns={columns2} data={data} /> }
-        </form>
-      </Paper>
+          <div className="rightContainer">
+            <div className="title"> Actual List </div>
+            <Paper>
+              <form>
+                <Table columns={columns2} data={data} />
+              </form>
+            </Paper>
+          </div>
+        </div> 
       </div>
-      <FormDialog />
-      </div> */}
-    </div> 
   );
 }

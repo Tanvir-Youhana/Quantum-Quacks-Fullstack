@@ -182,7 +182,6 @@ export const addStockEntry = async(req, res) => {
         // Make sure confidentLevel has valid input 
         if(confidentLevel < 1 || confidentLevel > 10)
         {
-            console.log("HELLO????")
             res.json({error: "Invalid confidentLevel input"});
         }
         
@@ -195,7 +194,7 @@ export const addStockEntry = async(req, res) => {
         }, function(err, quotes) {
             if(err)
             {
-                return res.status(404).json("error");
+                res.json("error");
             } else {
                  currentPrice = (quotes.price.regularMarketPrice).toFixed(2);
             }
@@ -242,11 +241,14 @@ export const addStockEntry = async(req, res) => {
             console.log("Check ExpirationAt: " + newStockEntry.expirationAt); 
         }
 
-
+        console.log("TEST HERE");
         // Create newCheckEntry row for newStockEntry 
         const {actualPrice, accuracy} = req.body; 
         const checkEntryID = newStockEntry.entryID; 
 
+        console.log("actualPrice: " + actualPrice);
+        console.log("accuracy: " + accuracy); 
+        console.log("checkEntryID: " + checkEntryID);
         const newCheckEntry = await checkEntry.create({
             checkEntryID: checkEntryID,
             actualPrice: actualPrice,
