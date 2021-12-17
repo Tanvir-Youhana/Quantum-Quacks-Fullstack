@@ -114,7 +114,7 @@ function Navbar() {
       onClose={handleMenuClose}
     >
       {/* onClick={handleMenuClose} */}
-      <MenuItem component={Link} to="./setting">
+      <MenuItem component={Link} to="/setting">
         Setting
       </MenuItem>
       <MenuItem onClick={logout}>Sign Out</MenuItem>
