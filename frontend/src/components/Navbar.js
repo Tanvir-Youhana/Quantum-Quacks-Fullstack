@@ -226,7 +226,7 @@ function Navbar() {
               variant="contained"
               color="success"
               component={Link}
-              to="./Home"
+              to="/Home"
             >
               Home
             </Button>
@@ -234,7 +234,7 @@ function Navbar() {
               variant="contained"
               color="success"
               component={Link}
-              to="./TrendingStock"
+              to="/TrendingStock"
             >
               Trending Stock
             </Button>
@@ -243,7 +243,7 @@ function Navbar() {
               color="success"
               variant="contained"
               component={Link}
-              to="./EarningCalendar"
+              to="/EarningCalendar"
             >
               Earning Calendar
             </Button>
@@ -251,7 +251,7 @@ function Navbar() {
               variant="contained"
               color="success"
               component={Link}
-              to="./IPOcalendar"
+              to="/IPOcalendar"
             >
               IPO Calendar
             </Button>
