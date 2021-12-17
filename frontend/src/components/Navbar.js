@@ -93,7 +93,7 @@ function Navbar() {
     localStorage.removeItem("accessToken");
     // sessionStorage.removeItem("accessToken");
 
-    window.location.href = "./";
+    window.location.href = "/";
   };
 
   const menuId = "primary-search-account-menu";
@@ -223,6 +223,22 @@ function Navbar() {
               Market Holiday
             </Button> */}
             <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="./Home"
+            >
+              Home
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              component={Link}
+              to="./TrendingStock"
+            >
+              Trending Stock
+            </Button>
+            <Button
               size="large"
               color="success"
               variant="contained"
@@ -238,22 +254,6 @@ function Navbar() {
               to="./IPOcalendar"
             >
               IPO Calendar
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              component={Link}
-              to="./TrendingStock"
-            >
-              Trending Stock
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              component={Link}
-              to="./Home"
-            >
-              Home
             </Button>
           </Stack>
 
