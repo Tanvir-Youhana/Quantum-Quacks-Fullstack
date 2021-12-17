@@ -21,7 +21,7 @@ export default function Home2() {
   const [data2, setData2] = useState([]);
   const [loadingData2, setLoadingData2] = useState(true); 
 
-  const columns1 = useMemo(
+  const columns = useMemo(
     () => [
       {
         Header: "Ticker",
@@ -58,6 +58,7 @@ export default function Home2() {
   );
 
   useEffect(() => {
+    // Prediction Table
     async function getData() {
       instance
         .get("/retrieveStockList",
@@ -72,8 +73,27 @@ export default function Home2() {
           setLoadingData(false);
         });
     }
+
+    // Actual Table
+    async function getData2() {
+      instance 
+        .get("/checkUserEntry",
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          console.log("TEST2: " + response.data);
+          setData2(response.data);
+          setLoadingData2(false);
+        })
+    }
     if (loadingData) {
       getData();
+    }
+    if (loadingData2) {
+      getData2(); 
     }
   }, []);
 
@@ -87,7 +107,7 @@ export default function Home2() {
             <div className="title"> Your Stocks Prediction's List </div>
             <Paper>
               <form>
-                <Table columns={columns1} data={data} />
+                <Table columns={columns} data={data} />
               </form>
             </Paper>
             <FormDialog/>
@@ -96,7 +116,7 @@ export default function Home2() {
             <div className="title"> Actual List </div>
             <Paper>
               <form>
-                <Table columns={columns2} data={data} />
+                <Table columns={columns2} data={data2} />
               </form>
             </Paper>
           </div>
