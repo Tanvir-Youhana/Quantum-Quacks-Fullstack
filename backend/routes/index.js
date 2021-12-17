@@ -8,7 +8,7 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-import {checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
+import {retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical} from "../controllers/Stocks.js";
 import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
 import validateToken from "../middlewares/AuthMiddleware.js";
 
@@ -18,8 +18,8 @@ const router = express.Router();
 router.get('/retrieveTrendingTickers', retrieveTrendingTickers);
 router.get('/retrieveMarketHolidays', retrieveMarketHolidays);
 router.get('/retrieveipoCalendar', retrieveipoCalendar);
-router.get('/retrieveEarningCalendar', retrieveEarningCalendar)
-
+router.get('/retrieveEarningCalendar', retrieveEarningCalendar); 
+router.get('/retrieveStockList', validateToken, retrieveStockList);
 // Static Routes
 router.get('/ListingStatus', getListingStatus);
 router.get('/earningCalendar', getEarningCalendar); 
@@ -32,8 +32,8 @@ router.get('/trendingTickers', getTrendingTickers);
 router.get('/checkUserEntry', checkUserEntry);
 router.get('/oldStockEntries', oldStockEntries);
 router.get('/yahooRealTime', yahooRealTime); 
-router.get('/:id/stocklist', userStockList); 
-router.post('/entry/ticker', addStockEntry);
+router.get('/stocklist', userStockList); 
+router.post('/entry/ticker', validateToken, addStockEntry);
 router.get('/stock/:symbol', getHistorical); 
 
 // User Routes

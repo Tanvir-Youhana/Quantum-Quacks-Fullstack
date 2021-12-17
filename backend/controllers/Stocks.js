@@ -3,6 +3,7 @@ import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import cts from 'check-ticker-symbol';
 import { Sequelize } from 'sequelize';
+import User from '../models/userModel.js';
 
 // Refresh button next to each entry. Still work in progress.
 export const checkUserEntry = async(req, res) => {
@@ -89,20 +90,34 @@ export const oldStockEntries = async(req, res) => {
         res.status(500).send(e.message); 
     }
 }
+
+// Retrieve current user stock list 
+export const retrieveStockList = async(req, res) => {
+    try {
+        const data = await stockEntry.findAll();
+        return res.status(201).send(data); 
+    } catch (e) {
+        res.status(500).send(e.message); 
+    }
+}
+
 // View current user stock list. Still work in progress
 export const userStockList = async(req, res) => {
     try {
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
         const list = await stockEntry.findAll({
             attributes: ['tickerName', 'prediciton', 'timeFrame'],
             where: {
-                userID: req.params.id,
-                expirationAt: {
-                    [Op.gte]:
-                    Sequelize.fn('NOW').getTime() - 86400000
-                }
+                userID: userID,
+                // expirationAt: {
+                //     [Op.gte]:
+                //     Sequelize.fn('NOW').getTime() - 86400000
+                // }
             }
         })
-        // JSON.stringify(list, null, 2); 
+        console.log("List: " + list); 
         return res.status(201).json(list); 
     } catch (e)
     {
@@ -114,19 +129,18 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
-
-        // Set userID to stored user.id  
-            //const userID = userID; 
-        // Check if tickerName is valid 
-        /*
-        */
+        const {tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
+        
+        const user = await User.findOne({where: {email: req.user.email}});
+        //console.log("user: ",user); 
+        const userID = user.id; 
+        //console.log("UserID: " + userID); 
        if(!cts.valid(tickerName))
        {
            return res.status(404).json({message: "Ticker name is invalid."});
        }
        // Check if entry has same tickerName + timeFrame
-       /*
+       
        const duplicatEntry = await stockEntry.findOne({
            attributes: ['tickerName', 'timeFrame'],
            where: {
@@ -142,10 +156,7 @@ export const addStockEntry = async(req, res) => {
        if(duplicatEntry)
         {
             return res.status(404).json({message: "Entry already exist"});
-        }
-        */
-
-        // ***Make sure we get userID from jswebtoken 
+        } 
 
         // Make sure prediction has valid input
         if(prediction != "Bullish" && prediction != "Bearish")

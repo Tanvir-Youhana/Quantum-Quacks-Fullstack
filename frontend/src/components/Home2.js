@@ -60,7 +60,7 @@ export default function Home2() {
 
   useEffect(() => {
     async function getData() {
-      await instance.get("/retrieveipoCalendar").then((response) => {
+      await instance.get("/retrieveStockList").then((response) => {
         console.log(response.data);
         setData(response.data);
         setLoadingData(false);

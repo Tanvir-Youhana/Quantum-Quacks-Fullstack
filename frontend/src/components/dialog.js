@@ -16,7 +16,9 @@ import instance from "../axios";
 import { useState, useEffect } from "react";
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [addStatus, setAddStatus] = useState(""); 
+
   const [tickerName, setTickerName] = useState("");
   const [prediction, setPrediction] = useState("");
   const [timeFrame, setTimeFrame] = useState("");
@@ -34,7 +36,7 @@ export default function FormDialog() {
 
   const handleClose2 = () => {
 
-    // Check input 
+    // Check input, looks right
     console.log(
       "tickerName: " + tickerName, 
       "prediction: " + prediction, 
@@ -44,7 +46,7 @@ export default function FormDialog() {
       "priceRange: " + priceRange
     )
 
-    /*
+    // Storing user entry in database
     instance
       .post("/entry/ticker", {
         tickerName: tickerName,
@@ -53,14 +55,20 @@ export default function FormDialog() {
         confidentLevel: confidentLevel,
         description: description,
         priceRange: priceRange,
+      },
+      {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
       })
-      */
-      // .then((response) => {
-      //   if (response.data.message) {
-      //     setaddStatus(response.data.message);
-      //   } else {
-      //     console.log("success")
-      //   }});
+       .then((response) => {
+         if (response.data.message) {
+           setAddStatus(response.data.message);
+         } else {
+           console.log(response); 
+         }
+        });
+    
     setOpen(false);
   };
   
