@@ -4,15 +4,26 @@ import yahooFinance from 'yahoo-finance';
 import cts from 'check-ticker-symbol';
 import { Sequelize } from 'sequelize';
 import User from '../models/userModel.js';
+import trendingTickers from '../models/trendingTickers.js';
 
 // Refresh button next to each entry. Still work in progress.
 export const checkUserEntry = async(req, res) => {
     try {
+
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
         // SELECT currentPrice, WHERE userID = this.userID AND expirationAT < currentDate
-        const entry = await stockEntry.findAll({
+        const entry_row = await stockEntry.findAll({
+            raw: true,
             where: {
-                userID: req.params.userID,
-                entryID: req.params.entryID
+                userID: userID, 
+            }
+        });
+        const entry = await stockEntry.findAll({
+            raw: true, 
+            where: {
+                userID: userID,
+                // entryID: req.params.entryID
                 /*
                 expirationAt: {
                     [Op.lt]:
@@ -20,54 +31,89 @@ export const checkUserEntry = async(req, res) => {
                 }
                 */
             }
-        });
+        })
+        .then(entries => entries.map(entry => entry.entryID));
+        console.log("entry Value: ", entry);
+        console.log("First Entry: ", entry_row[0]);
         const check = await checkEntry.findAll({
             where: {
-                entryID: req.params.entryID 
+                checkEntryID: entry
             }
         });
-        // Get acutalPrice
-        let actualPrice; 
-        await yahooFinance.quote({
-            symbol: entry.tickerName,
-            modules: ['price']
-        }, function(err, quotes) {
-            if (err)
-            {
-                return res.status(404).json("error");
-            } else {
-                actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
-            }
-        });
-        
-        // Create accuracy 
-        if(entry.currentPrice < check.actualPrice)
+        //console.log("Check: ", check); 
+        console.log("Second Entry: " + check[1]); 
+        console.log("Second Check Entry: ", check[1].checkEntryID); 
+        for(let i = 0; i < entry.length; ++i)
         {
-            if(entry.prediction == "Bearish")
+            console.log("For Loop: " + i + " " + entry_symbol)
+
+            // Get acutalPrice
+            let actualPrice; 
+            await yahooFinance.quote({
+                symbol: entry_row[i].tickerName,
+                modules: ['price']
+            }, function(err, quotes) {
+                if (err)
+                {
+                    return res.status(404).json("error");
+                } else {
+                    actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
+                }
+            });
+            console.log("The actual price: " + acutalPrice); 
+            // Create accuracy 
+            if(entry_row[i].currentPrice < actualPrice)
             {
-                check.accuracy = "False";
-            } else {
-                check.accuracy = "True";
+                if(entry_row[i].prediction == "Bearish")
+                {
+                    await check.update({accuracy: "False"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                    //check[i].accuracy = "False";
+                } else {
+                    await check.update({accuracy: "True"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    //check[i].accuracy = "True";
+                    }
+                }
+            }
+            if(entry_row[i].currentPrice > actualPrice)
+            {
+                if(entry_row[i].prediction == "Bearish")
+                {
+                    await check.update({accuracy: "True"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                } else {
+                    await check.update({accuracy: "False"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                }
+            }
+            if(entry_row[i].currentPrice == actualPrice)
+            {
+                await check.update({accuracy: "Sideways"}), {
+                    where: {
+                        checkEntryID: entry_row[i].entryID
+                    }
+                }
+                //check[i].accuracy = "Sideways"; 
+                console.log("Current Price and Actual Price are equal!");
             }
         }
-        if(entry.currentPrice > check.actualPrice)
-        {
-            if(entry.prediction == "Bearish")
-            {
-                check.accuracy = "True";
-            } else {
-                check.accuracy = "False";
-            }
-        }
-        if(entry.currentPrice == check.actualPrice)
-        {
-            check.accuracy = "Sideways"; 
-            console.log("Current Price and Actual Price are equal!");
-        }
+        console.log("End of Program");
 
     } catch(e)
     {
-        res.stauts(500).send(e.message); 
+        res.status(500).send(e.message); 
     }
 }
 
@@ -137,7 +183,6 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        console.log("HELP ME");
         const {tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
         
         const user = await User.findOne({where: {email: req.user.email}});

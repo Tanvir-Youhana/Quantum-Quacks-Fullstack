@@ -29,7 +29,7 @@ router.get('/trendingTickers', getTrendingTickers);
 
 // Stock Routes
 //router.get('/', getAllUsers);
-router.get('/checkUserEntry', checkUserEntry);
+router.get('/checkUserEntry', validateToken, checkUserEntry);
 router.get('/oldStockEntries', oldStockEntries);
 router.get('/yahooRealTime', yahooRealTime); 
 router.get('/stocklist', userStockList); 
