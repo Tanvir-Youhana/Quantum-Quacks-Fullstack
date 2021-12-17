@@ -14,6 +14,8 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import instance from "../axios";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+
 
 export default function FormDialog() {
   const [open, setOpen] = useState(false);
@@ -65,13 +67,15 @@ export default function FormDialog() {
        .then((response) => {
          if(response.data.error)
          {
-            alert(response.data.error);
+            setOpen(false);
+            Swal.fire({icon: "error", title: response.data.error });
+         } else {
+            setOpen(false);
+            window.location.reload();
          }
 
         });
-    
-    setOpen(false);
-    window.location.reload();
+
   };
   
   // useEffect(() => {

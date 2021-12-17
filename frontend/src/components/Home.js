@@ -10,8 +10,10 @@ import Table from "./Table";
 // import "./predictionTable.css";
 import FormDialog from "./dialog";
 import "./Home.css"; 
+import Moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ButtonGroup from '@mui/material/ButtonGroup';
+<<<<<<< HEAD
 import { ThemeProvider } from "@emotion/react";
 import { purple } from "@mui/material/colors";
 import { useThemeWithoutDefault } from "@mui/system";
@@ -30,6 +32,8 @@ const theme = createTheme (
     }
   }
 )
+=======
+>>>>>>> ca3faefe930a6494f5aeb4311204b2a31f05d02b
 
 export default function Home() {
 
@@ -68,6 +72,26 @@ export default function Home() {
       {
           Header: "Time Frame",
           accessor: "timeFrame",
+        },
+        {
+          Header: "Confident Level",
+          accessor: "confidentLevel",
+        },
+        {
+          Header: "Description",
+          accessor: "description",
+        },
+        {
+          Header: "Price Range",
+          accessor: "priceRange",
+        },
+        {
+          Header: "Expiration Date",
+          accessor: d => {
+            return Moment(d.expirationAt)
+              .local()
+              .format("MM-DD-YYYY h:mm a")
+          },
         },
     ],
     []

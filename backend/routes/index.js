@@ -8,7 +8,7 @@ import {
     deleteProduct
 } from "../controllers/Products.js";
 import {auth, getAllUsers, register, login, getLogin, updatePassword } from "../controllers/Users.js";
-import {deleteEntryRow, retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical, retrieveActualList} from "../controllers/Stocks.js";
+import {chartTest, tickerValidity, deleteEntryRow, retrieveStockList, checkUserEntry, oldStockEntries, yahooRealTime, userStockList, addStockEntry, getHistorical, retrieveActualList} from "../controllers/Stocks.js";
 import {retrieveTrendingTickers, getEarningCalendar, getIPOCalendar, getListingStatus, getMarketHolidays, getTrendingTickers, retrieveMarketHolidays,retrieveipoCalendar,retrieveEarningCalendar } from "../controllers/Static.js";
 import validateToken from "../middlewares/AuthMiddleware.js";
 
@@ -39,6 +39,8 @@ router.get('/yahooRealTime', yahooRealTime);
 router.get('/stocklist', userStockList); 
 router.post('/entry/ticker', validateToken, addStockEntry);
 router.get('/stock/:symbol', getHistorical); 
+router.get('/chart/:symbol', chartTest); 	
+router.get('/ticker/:ticker', tickerValidity)
 
 // User Routes
 router.get('/auth', validateToken, auth);
