@@ -1,19 +1,42 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { Paper, TextField } from "@mui/material";
+import { createTheme, Paper, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
-import "./MarketHoliday.css";
 import instance from "../axios";
 import { useState, useMemo, useEffect } from "react";
 //import axios from "axios";
 import { useTable } from "react-table";
 import Table from "./Table";
-import "./predictionTable.css";
+// import "./predictionTable.css";
 import FormDialog from "./dialog";
 import "./Home.css"; 
 import Moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ButtonGroup from '@mui/material/ButtonGroup';
+<<<<<<< HEAD
+<<<<<<< HEAD
+import { ThemeProvider } from "@emotion/react";
+import { purple } from "@mui/material/colors";
+import { useThemeWithoutDefault } from "@mui/system";
+
+
+const theme = createTheme (
+  {
+    variant: "#001a34",
+    palette:{
+      primary:
+      {
+        main: "#fefefe"
+      },
+      secondary: purple,
+      background: "#fefefe"
+    }
+  }
+)
+=======
+>>>>>>> ca3faefe930a6494f5aeb4311204b2a31f05d02b
+=======
+>>>>>>> ca3faefe930a6494f5aeb4311204b2a31f05d02b
 
 export default function Home() {
 
@@ -201,28 +224,34 @@ export default function Home() {
             <div className= "refreshPosition">
               <Button variant="contained" onClick={handleRefresh}>Refresh Actual List</Button>
             </div>*/}
-            <div className= "deletePosition" background-color="white">
+            <div className= "deletePosition">
               {/* <Button variant="contained"  startIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button> */}
-                <TextField
+               
+               <ThemeProvider theme= {theme}>
+               <TextField
               autoFocus
-              label="ID: "
-              placeholder="Enter Ticker name  ex: APPL"
+              label="Delete ID: "
+              placeholder="Choice a ID to delete"
               halfWidth
               variant="filled"
               color="secondary"
+              background= {useThemeWithoutDefault}
               type= "number"
-              background-color= "rgb(255, 255, 255)"
+              background-color= "white" 
+              // InputLabelProps={{className:textfield__label}}   
+              // inputProps={{ className: classes.input }}
               // className={classes.root}
-              helperText= "Choice a ID to delete"
               onChange={(e) => {
                 setIdDelete(e.target.value);
               }}
               />
+               </ThemeProvider>
+                </div>
 
 
 
               
-            </div> 
+            
           </div>
           <div className="rightContainer">
             <div className="title"> Actual List </div>
