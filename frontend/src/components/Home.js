@@ -11,8 +11,23 @@ import Table from "./Table";
 import "./predictionTable.css";
 import FormDialog from "./dialog";
 import "./Home.css"; 
+import DeleteIcon from '@mui/icons-material/Delete';
+import ButtonGroup from '@mui/material/ButtonGroup';
+// import { makeStyles } from "@mui/styles";
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     "& .MuiFilledInput-root": {
+//       background: "rgb(232, 241, 250)"
+//     }
+//   }
+// }));
+
 
 export default function Home() {
+
+  // const classes = useStyles();
+
   // exchange name date
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -160,25 +175,45 @@ export default function Home() {
                 <Table columns={columns} data={data} />
               </form>
             </Paper>
-            <FormDialog/>
-            <div>
-              <Button onClick={handleRefresh}>Refresh Actual List</Button>
-            </div>
-            <div>
-              <Button onClick={handleDelete}>Delete</Button>
+           
+
+            <ButtonGroup variant="contained" aria-label="outlined primary button group">
+            <FormDialog />
+            <Button variant="contained" size="medium" onClick={handleRefresh}>Refresh Actual List</Button>
+            <Button variant="contained"  size="medium" startIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button>
+            </ButtonGroup>
+
+
+
+
+
+
+            {/* <FormDialog />
+            <div className= "refreshPosition">
+              <Button variant="contained" onClick={handleRefresh}>Refresh Actual List</Button>
+            </div>*/}
+            <div className= "deletePosition" background-color="white">
+              {/* <Button variant="contained"  startIcon={<DeleteIcon />} onClick={handleDelete}>Delete</Button> */}
                 <TextField
               autoFocus
               label="ID: "
               placeholder="Enter Ticker name  ex: APPL"
               halfWidth
-              variant="outlined"
+              variant="filled"
               color="secondary"
               type= "number"
+              background-color= "rgb(255, 255, 255)"
+              // className={classes.root}
+              helperText= "Choice a ID to delete"
               onChange={(e) => {
                 setIdDelete(e.target.value);
               }}
               />
-            </div>
+
+
+
+              
+            </div> 
           </div>
           <div className="rightContainer">
             <div className="title"> Actual List </div>
