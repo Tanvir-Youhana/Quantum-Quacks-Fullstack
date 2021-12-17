@@ -22,23 +22,19 @@ export default function Home2() {
     () => [
       {
         Header: "Ticker",
-        accessor: "symbol",
+        accessor: "tickerName",
+      },
+      {
+        Header: "Current Price",
+        accessor: "currentPrice",
       },
       {
         Header: "Prediction",
-        accessor: "name",
+        accessor: "prediction",
       },
       {
-        Header: "Price",
-        accessor: "ipoDate",
-      },
-      {
-          Header: "Time",
-          accessor: "priceRangeLow",
-        },
-        {
-          Header: "Price",
-          accessor: "priceRangeHigh",
+          Header: "Time Frame",
+          accessor: "timeFrame",
         },
     ],
     []
@@ -60,11 +56,18 @@ export default function Home2() {
 
   useEffect(() => {
     async function getData() {
-      await instance.get("/retrieveStockList").then((response) => {
-        console.log(response.data);
-        setData(response.data);
-        setLoadingData(false);
-      });
+      instance
+        .get("/retrieveStockList",
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          console.log("TEST: " + response.data);
+          setData(response.data);
+          setLoadingData(false);
+        });
     }
     if (loadingData) {
       getData();
@@ -78,23 +81,25 @@ export default function Home2() {
       </div >
       <div className="bigContainer">
           <div className= "leftContainer">
-          <div className="title"> Your Stocks Prediction's List </div>
-      <Paper>
-        <form>
-          <Table columns={columns1} data={data} />
-        </form>
-      </Paper>
+            <div className="title"> Your Stocks Prediction's List </div>
+            <Paper>
+              <form>
+                <Table columns={columns1} data={data} />
+              </form>
+            </Paper>
+            <FormDialog/>
           </div>
-      <div className="rightContainer">
+        </div>
+      {/* <div className="rightContainer">
       <div className="title"> Actual List </div>
       <Paper>
         <form>
-          <Table columns={columns2} data={data} />
+          { <Table columns={columns2} data={data} /> }
         </form>
       </Paper>
       </div>
       <FormDialog />
-      </div>
-    </div>
+      </div> */}
+    </div> 
   );
 }

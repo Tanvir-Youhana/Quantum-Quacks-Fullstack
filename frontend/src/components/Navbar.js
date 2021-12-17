@@ -173,22 +173,22 @@ function Navbar() {
             />
           </Search>
           <Stack spacing={2} direction="row">
-            <Button variant="contained" component={Link} to="./marketHoliday">
+            <Button variant="contained" component={Link} to="/marketHoliday">
               Market Holiday
             </Button>
-            <Button variant="contained" component={Link} to="./EarningCalendar">
+            <Button variant="contained" component={Link} to="/EarningCalendar">
               Earning Calendar
             </Button>
-            <Button variant="contained" component={Link} to="./IPOcalendar">
+            <Button variant="contained" component={Link} to="/IPOcalendar">
               IPO Calendar
             </Button>
-            <Button variant="contained" component={Link} to="./TrendingStock">
+            <Button variant="contained" component={Link} to="/TrendingStock">
               Trending Stock
             </Button>
-            <Button variant="contained" component={Link} to="./Home">
+            <Button variant="contained" component={Link} to="/Home">
               Home
             </Button>
-            <Button variant="contained" component={Link} to="./Home2">
+            <Button variant="contained" component={Link} to="/Home2">
               Home2
             </Button>
           </Stack>

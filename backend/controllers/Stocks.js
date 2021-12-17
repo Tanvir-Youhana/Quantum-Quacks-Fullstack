@@ -94,7 +94,15 @@ export const oldStockEntries = async(req, res) => {
 // Retrieve current user stock list 
 export const retrieveStockList = async(req, res) => {
     try {
-        const data = await stockEntry.findAll();
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+        
+        const data = await stockEntry.findAll({
+            where: {
+                userID: userID,
+            }
+        });
+        console.log("StockList data: " + data); 
         return res.status(201).send(data); 
     } catch (e) {
         res.status(500).send(e.message); 
