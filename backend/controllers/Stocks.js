@@ -3,15 +3,85 @@ import checkEntry from '../models/checkEntries.js';
 import yahooFinance from 'yahoo-finance'; 
 import cts from 'check-ticker-symbol';
 import { Sequelize } from 'sequelize';
+import User from '../models/userModel.js';
+import trendingTickers from '../models/trendingTickers.js';
+
+export const deleteEntryRow = async(req, res) => {
+    try {
+        const { entryID } = req.body; 
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        const user_entry = await stockEntry.findOne({
+            where: {
+                entryID: entryID,
+                userID: userID 
+            }
+        })
+        await user_entry.destroy(); 
+
+        res.json({message: "Successfully deleted row"}); 
+    } catch(e)
+    {
+        res.status(500).send(e.message); 
+    }
+}
+
+export const retrieveActualList = async(req, res) => {
+    try {
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        // entry gives only the entryID that matches the userID
+        const entry = await stockEntry.findAll({
+            raw: true, 
+            where: {
+                userID: userID,
+            }
+        })
+        .then(entries => entries.map(entry => entry.entryID));
+        console.log("Selected entryID: " + entry); 
+
+        // data finds all rows in checkEntry table that matches userID from checkEntryID 
+        const data = await checkEntry.findAll({
+            where: {
+                checkEntryID: entry
+            }
+        });
+        console.log("retrieveActualList called"); 
+        //console.log("StockList data: " + data); 
+        return res.status(201).send(data); 
+    } catch (e) {
+        res.status(500).send(e.message); 
+    }
+}
 
 // Refresh button next to each entry. Still work in progress.
 export const checkUserEntry = async(req, res) => {
     try {
-        // SELECT currentPrice, WHERE userID = this.userID AND expirationAT < currentDate
-        const entry = await stockEntry.findAll({
+
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        // entry_row finds all row in Stock Entry table that matches userID
+        // and already expires
+        const entry_row = await stockEntry.findAll({
+            raw: true,
             where: {
-                userID: req.params.userID,
-                entryID: req.params.entryID
+                userID: userID, 
+                expirationAt: {
+                    [Op.lt]:
+                    Sequelize.fn('NOW') 
+                }
+            }
+        });
+        //console.log("Entry_row: ", entry_row); 
+        // entry gives only the entryID that matches the userID
+        const entry = await stockEntry.findAll({
+            raw: true, 
+            where: {
+                userID: userID,
+                // entryID: req.params.entryID
                 /*
                 expirationAt: {
                     [Op.lt]:
@@ -19,54 +89,112 @@ export const checkUserEntry = async(req, res) => {
                 }
                 */
             }
-        });
+        })
+        .then(entries => entries.map(entry => entry.entryID));
+        //console.log("entry Value: ", entry);
+        //console.log("First Entry: ", entry_row[0]);
+        console.log("Selected entryID: " + entry); 
+
+        // check finds all rows in checkEntry table that matches userID from checkEntryID 
         const check = await checkEntry.findAll({
             where: {
-                entryID: req.params.entryID 
+                checkEntryID: entry
             }
         });
-        // Get acutalPrice
-        let actualPrice; 
-        await yahooFinance.quote({
-            symbol: entry.tickerName,
-            modules: ['price']
-        }, function(err, quotes) {
-            if (err)
+        // Puts entries into actual table 
+        for(let i = 0; i < entry.length; ++i)
+        {
+            console.log("Index: " + i + " , " + "checkEntryID: " + check[i].checkEntryID)
+
+            // Get acutalPrice
+            let actualPrice; 
+            await yahooFinance.quote({
+                symbol: entry_row[i].tickerName,
+                modules: ['price']
+            }, function(err, quotes) {
+                if (err)
+                {
+                    return res.json("error");
+                } else {
+                    actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
+                    check[i].update({actualPrice: actualPrice}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                }
+            })
+            console.log("The actual price: " + actualPrice); 
+            //console.log("The current price: " + entry_row[i].currentPrice); 
+            // Create accuracy 
+            if(entry_row[i].currentPrice < actualPrice)
             {
-                return res.status(404).json("error");
-            } else {
-                actualPrice = (quotes.price.regularMarketPrice).toFixed(2); 
+                console.log("CHECKING");
+                if(entry_row[i].prediction == "Bearish")
+                {
+                    console.log("TEST97");
+                    await check[i].update({accuracy: "False"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                    console.log("HELLO?");
+                    //check[i].accuracy = "False";
+                } else {
+                    await check[i].update({accuracy: "True"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    //check[i].accuracy = "True";
+                    }
+                }
+            }
+            if(entry_row[i].currentPrice > actualPrice)
+            {
+                if(entry_row[i].prediction == "Bearish")
+                {
+                    console.log("TEST98");
+                    await check[i].update({accuracy: "True"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                } else {
+                    console.log("TEST99");
+                    await check[i].update({accuracy: "False"}), {
+                        where: {
+                            checkEntryID: entry_row[i].entryID
+                        }
+                    }
+                }
+            }
+            if(entry_row[i].currentPrice == actualPrice)
+            {
+                console.log("TEST100");
+                await check[i].update({accuracy: "Sideways"}), {
+                    where: {
+                        checkEntryID: entry_row[i].entryID
+                    }
+                }
+                console.log("Current Price and Actual Price are equal!");
+                //check[i].accuracy = "Sideways"; 
+
+            }
+
+            console.log("End of for loop iteration");
+        }
+        const data = await checkEntry.findAll({
+            where: {
+                checkEntryID: entry,
             }
         });
-        
-        // Create accuracy 
-        if(entry.currentPrice < check.actualPrice)
-        {
-            if(entry.prediction == "Bearish")
-            {
-                check.accuracy = "False";
-            } else {
-                check.accuracy = "True";
-            }
-        }
-        if(entry.currentPrice > check.actualPrice)
-        {
-            if(entry.prediction == "Bearish")
-            {
-                check.accuracy = "True";
-            } else {
-                check.accuracy = "False";
-            }
-        }
-        if(entry.currentPrice == check.actualPrice)
-        {
-            check.accuracy = "Sideways"; 
-            console.log("Current Price and Actual Price are equal!");
-        }
+        console.log("End of Program");
+        console.log("DATA: ", data)
+        return res.status(201).send(data); 
 
     } catch(e)
     {
-        res.stauts(500).send(e.message); 
+        res.status(500).send(e.message); 
     }
 }
 
@@ -89,20 +217,43 @@ export const oldStockEntries = async(req, res) => {
         res.status(500).send(e.message); 
     }
 }
+
+// Retrieve current user stock list 
+export const retrieveStockList = async(req, res) => {
+    try {
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
+        const data = await stockEntry.findAll({
+            where: {
+                userID: userID,
+            }
+        });
+        //console.log("StockList data: " + data); 
+        return res.status(201).send(data); 
+    } catch (e) {
+        res.status(500).send(e.message); 
+    }
+}
+
+
 // View current user stock list. Still work in progress
 export const userStockList = async(req, res) => {
     try {
+        const user = await User.findOne({where: {email: req.user.email}});
+        const userID = user.id; 
+
         const list = await stockEntry.findAll({
             attributes: ['tickerName', 'prediciton', 'timeFrame'],
             where: {
-                userID: req.params.id,
-                expirationAt: {
-                    [Op.gte]:
-                    Sequelize.fn('NOW').getTime() - 86400000
-                }
+                userID: userID,
+                // expirationAt: {
+                //     [Op.gte]:
+                //     Sequelize.fn('NOW').getTime() - 86400000
+                // }
             }
         })
-        // JSON.stringify(list, null, 2); 
+        console.log("List: " + list); 
         return res.status(201).json(list); 
     } catch (e)
     {
@@ -114,19 +265,18 @@ export const userStockList = async(req, res) => {
 // Add user's prediciton entry to database
 export const addStockEntry = async(req, res) => {
     try {
-        const {userID, tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
-
-        // Set userID to stored user.id  
-            //const userID = userID; 
-        // Check if tickerName is valid 
-        /*
-        */
+        const {tickerName, prediction, timeFrame, confidentLevel, description, priceRange} = req.body; 
+        
+        const user = await User.findOne({where: {email: req.user.email}});
+        //console.log("user: ",user); 
+        const userID = user.id; 
+        //console.log("UserID: " + userID); 
        if(!cts.valid(tickerName))
        {
-           return res.status(404).json({message: "Ticker name is invalid."});
+           return res.json({error: "Ticker name is invalid."});
        }
        // Check if entry has same tickerName + timeFrame
-       /*
+       
        const duplicatEntry = await stockEntry.findOne({
            attributes: ['tickerName', 'timeFrame'],
            where: {
@@ -134,34 +284,30 @@ export const addStockEntry = async(req, res) => {
                tickerName: tickerName,
                timeFrame: timeFrame
 
-            }}).catch(
-           (err) => {
-               console.log("Error: ", err); 
-           }
-       );
-       if(duplicatEntry)
-        {
-            return res.status(404).json({message: "Entry already exist"});
-        }
-        */
+            }})
 
-        // ***Make sure we get userID from jswebtoken 
+       console.log("duplicateEntry: ", duplicatEntry); 
+       if(duplicatEntry != null)
+        {
+            return res.json({error: "Entry already exist"});
+        } 
 
         // Make sure prediction has valid input
         if(prediction != "Bullish" && prediction != "Bearish")
         {
-            return res.status(404).json({message: "Invalid prediction input"}); 
+            return res.json({error: "Invalid prediction input"}); 
         }
         // Make sure timeFrame has valid input
         console.log("timeFrame: " + timeFrame); 
         if(timeFrame != "EOD" && timeFrame != "EOW" && timeFrame != "EOM")
         {
-            return res.status(404).json({message: "Invalid timeFrame input"});
+            return res.json({error: "Invalid timeFrame input"});
         }
+        console.log("confidentLevel: " + confidentLevel);
         // Make sure confidentLevel has valid input 
-        if(confidentLevel < 1 || confidentLevel > 10)
+        if( confidentLevel < 1 && confidentLevel > 10)
         {
-            return res.status(404).json({message: "Invalid confidentLevel input"});
+            return res.json({error: "Invalid confident input. Please enter a number from 1 to 10"});
         }
         
 
@@ -173,7 +319,7 @@ export const addStockEntry = async(req, res) => {
         }, function(err, quotes) {
             if(err)
             {
-                return res.status(404).json("error");
+                res.json("error");
             } else {
                  currentPrice = (quotes.price.regularMarketPrice).toFixed(2);
             }
@@ -182,7 +328,7 @@ export const addStockEntry = async(req, res) => {
         console.log("currentPrice: " + currentPrice);
 
         let expirationAt = null; 
-
+        
         const newStockEntry = await stockEntry.create({
             userID: userID, // req.params.user_id from jswebtoken
             tickerName: tickerName,    // Valid Ticker Name
@@ -194,8 +340,7 @@ export const addStockEntry = async(req, res) => {
             currentPrice: currentPrice, // get currentPrice from API 
             expirationAt: expirationAt //  Calculate expiration using Sequelize 
         });
-        res.json("Stock Entry added!")
-        
+        console.log("Stock entry added!");   
         // Create expirationAt
         if(timeFrame == "EOD") {
             //newStockEntry.expirationAt = newStockEntry.createdAt;
@@ -221,11 +366,18 @@ export const addStockEntry = async(req, res) => {
             console.log("Check ExpirationAt: " + newStockEntry.expirationAt); 
         }
 
+        console.log("TEST HERE");
 
-        // Create newCheckEntry row for newStockEntry 
-        const {actualPrice, accuracy} = req.body; 
+        //const {actualPrice, accuracy} = req.body; 
+        let actualPrice;
+        let accuracy = "Pending"; 
+
         const checkEntryID = newStockEntry.entryID; 
 
+        console.log("actualPrice: " + actualPrice);
+        console.log("accuracy: " + accuracy); 
+        console.log("checkEntryID: " + checkEntryID);
+        // Create newCheckEntry row for newStockEntry 
         const newCheckEntry = await checkEntry.create({
             checkEntryID: checkEntryID,
             actualPrice: actualPrice,
@@ -233,6 +385,7 @@ export const addStockEntry = async(req, res) => {
         });
 
         console.log("Check Entry also added!"); 
+        return res.json({message: "Successfully added entry!"})
 
     } catch (e) 
     {
