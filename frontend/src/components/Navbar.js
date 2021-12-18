@@ -153,13 +153,14 @@ function Navbar() {
     </Menu>
   );
   let history = useHistory();
-  const getTicker = () => {
+  const getTicker = () => { 
     if (!cts.valid(input)) {
       Swal.fire({ icon: "error", title: "Invalid ticker! Please try again." });
       return;
     }
     const ticker = input.toUpperCase();
     history.push("/chart/" + ticker + "");
+    window.location.reload();
   };
 
   return (
