@@ -16,10 +16,9 @@ import instance from "../axios";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-
 export default function FormDialog() {
   const [open, setOpen] = useState(false);
-  const [addStatus, setAddStatus] = useState(""); 
+  const [addStatus, setAddStatus] = useState("");
 
   const [tickerName, setTickerName] = useState("");
   const [prediction, setPrediction] = useState("");
@@ -27,7 +26,7 @@ export default function FormDialog() {
   const [confidentLevel, setConfidentLevel] = useState("");
   const [description, setDescription] = useState("");
   const [priceRange, setPriceRange] = useState("");
-  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -37,47 +36,46 @@ export default function FormDialog() {
   };
 
   const handleClose2 = () => {
-
     // Check input, looks right
     console.log(
-      "tickerName: " + tickerName, 
-      "prediction: " + prediction, 
-      "timeFrame: " + timeFrame, 
-      "confidentLevel: " + confidentLevel, 
-      "description: " + description, 
+      "tickerName: " + tickerName,
+      "prediction: " + prediction,
+      "timeFrame: " + timeFrame,
+      "confidentLevel: " + confidentLevel,
+      "description: " + description,
       "priceRange: " + priceRange
-    )
+    );
 
     // Storing user entry in database
     console.log("TEST TEST");
     instance
-      .post("/entry/ticker", {
-        tickerName: tickerName,
-        prediction: prediction,
-        timeFrame: timeFrame,
-        confidentLevel: confidentLevel,
-        description: description,
-        priceRange: priceRange,
-      },
-      {
-        headers: {
-          accessToken: localStorage.getItem("accessToken"),
+      .post(
+        "/entry/ticker",
+        {
+          tickerName: tickerName,
+          prediction: prediction,
+          timeFrame: timeFrame,
+          confidentLevel: confidentLevel,
+          description: description,
+          priceRange: priceRange,
         },
-      })
-       .then((response) => {
-         if(response.data.error)
-         {
-            setOpen(false);
-            Swal.fire({icon: "error", title: response.data.error });
-         } else {
-            setOpen(false);
-            window.location.reload();
-         }
-
-        });
-
+        {
+          headers: {
+            accessToken: localStorage.getItem("accessToken"),
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.error) {
+          setOpen(false);
+          Swal.fire({ icon: "error", title: response.data.error });
+        } else {
+          setOpen(false);
+          window.location.reload();
+        }
+      });
   };
-  
+
   // useEffect(() => {
   //   instance.get("/entry/ticker").then((response) => {
   //     if (response.data.loggedIn === true)
@@ -85,7 +83,6 @@ export default function FormDialog() {
   //     console.log(response);
   //   });
   // }, []);
-  
 
   return (
     <div>
@@ -101,7 +98,7 @@ export default function FormDialog() {
           <TextField
             autoFocus
             label="Ticker name"
-            placeholder="Enter Ticker name  ex: APPL"
+            placeholder="Enter Ticker name  ex: AAPL"
             fullWidth
             variant="standard"
             onChange={(e) => {
@@ -142,18 +139,30 @@ export default function FormDialog() {
               aria-label="Time frame"
               name="row-radio-buttons-group"
             >
-              <FormControlLabel value="EOD" control={<Radio />} label="EOD" 
-              onClick={(e) => {
-                setTimeFrame(e.target.value);
-              }}/>
-              <FormControlLabel value="EOW" control={<Radio />} label="EOW" 
-              onClick={(e) => {
-                setTimeFrame(e.target.value);
-              }}/>
-              <FormControlLabel value="EOM" control={<Radio />} label="EOM" 
-              onClick={(e) => {
-                setTimeFrame(e.target.value);
-              }}/>
+              <FormControlLabel
+                value="EOD"
+                control={<Radio />}
+                label="EOD"
+                onClick={(e) => {
+                  setTimeFrame(e.target.value);
+                }}
+              />
+              <FormControlLabel
+                value="EOW"
+                control={<Radio />}
+                label="EOW"
+                onClick={(e) => {
+                  setTimeFrame(e.target.value);
+                }}
+              />
+              <FormControlLabel
+                value="EOM"
+                control={<Radio />}
+                label="EOM"
+                onClick={(e) => {
+                  setTimeFrame(e.target.value);
+                }}
+              />
             </RadioGroup>
           </FormControl>
 

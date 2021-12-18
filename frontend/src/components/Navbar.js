@@ -23,7 +23,6 @@ import { useParams } from "react-router-dom";
 import cts from "check-ticker-symbol";
 import Swal from "sweetalert2";
 
-
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -176,7 +175,6 @@ function Navbar() {
             fontFamily="Roboto"
             noWrap
             component="div"
-
             sx={{ display: { xs: "none", sm: "block" } }}
           >
             Quantum Quacks
@@ -224,15 +222,15 @@ function Navbar() {
             >
               Home
             </Button>
-            <Button 
+            <Button
               color="success"
               variant="contained"
               component={Link}
               to="/marketHoliday"
             >
               Market Holiday
-            </Button> 
-            
+            </Button>
+
             <Button
               variant="contained"
               color="success"
@@ -257,7 +255,6 @@ function Navbar() {
               to="/IPOcalendar"
             >
               IPO Calendar
-              Home
             </Button>
           </Stack>
 
