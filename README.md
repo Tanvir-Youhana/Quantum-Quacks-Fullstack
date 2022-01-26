@@ -12,7 +12,7 @@ What makes this software interesting is that it uses real-time stock APIs. In ou
 
 Lastly, but the most important feature is the stock prediction itself. As soon as you input the required information in the entry box, you will get the current price of your chosen stock and the expiration Date based on the time interval you chose. As of right now we have three choices, EOD (End of Day), EOW (End of Week), EOM (End of Month). This means that if you select End of Week, your stock entry will “expire” 7 days from now and so on. On the right side is the “Actual Table”, and if you press the “Refresh Actual Table” button, it will update to the actual price of that expiration date.  
 
-## Run on Localhost: 
+## Run on localhost: 
 1) Clone the repo
 2) Install dependencies in the frontend and backend folder
    ```
@@ -33,4 +33,9 @@ Lastly, but the most important feature is the stock prediction itself. As soon a
 - Md Islam
 - Refat Monjur 
 
-### Project Report
+## Documentation
+[Project Report](https://github.com/QuocHHDo/Quantum-Quacks-Fullstack-App/blob/c19bf9974163a7544a6c29e76a62224657299ba7/Quantum-Quacks-FullStack-Report.pdf)
+
+Video Demo
+
+[![Video Demo](https://img.youtube.com/vi/ouFWHd1M6Lc/0.jpg)](https://www.youtube.com/watch?v=ouFWHd1M6Lc)
